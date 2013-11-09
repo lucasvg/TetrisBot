@@ -14,5 +14,7 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination, 
 
 bool applyHomeScreen(SDL_Surface *screen);
 
+bool applyGameScreen(SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH);
+
 #endif	/* GENERAL_FUNCTIONS_H */
 
