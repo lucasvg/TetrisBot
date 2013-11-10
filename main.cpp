@@ -1,6 +1,8 @@
 // NOTES
 
-//add the piece colision with the robot and the fire
+//add the piece collision with the robot and the fire
+// finish the createRandomPiece function
+// verify leak situations
 
 //The headers
 #include "SDL/SDL.h"
@@ -26,7 +28,7 @@ const char *SCREEN_CAPTION = "TetrisBot";
 const int FRAMES_PER_SECOND = 40;
 
 // limits of the screen (px)
-const int SCREEN_PLAYABLE_WIDTH = 300;
+const int SCREEN_PLAYABLE_WIDTH = 304;
 const int SCREEN_DIVIDER_BAR_WIDTH = 3;
 
 // surfaces of the colored squares
@@ -116,10 +118,33 @@ public:
 
     bool isCollided(int SCREEN_HEIGHT) {
         //the minus one is because the square colides when it is 1 pixel far
-        return (box.y + box.h >= SCREEN_HEIGHT-1);
+        return (box.y + box.h >= SCREEN_HEIGHT - 1);
+    }
+
+    bool isCollided(Square otherSquare) {
+        if(box.x == otherSquare.getx())
+            if (box.y + box.h >= otherSquare.gety())
+                return true;
+        return false;
     }
 
     //Shows the square on the screen
+
+    int getx() {
+        return box.x;
+    }
+
+    int gety() {
+        return box.y;
+    }
+
+    int getw() {
+        return box.w;
+    }
+
+    int geth() {
+        return box.h;
+    }
 
     void show(SDL_Surface *SQUARES_SURFACES[], SDL_Surface *screen) {
         apply_surface(box.x, box.y, SQUARES_SURFACES[square_color], screen);
@@ -131,13 +156,15 @@ class Piece {
 private:
     std::vector<Square> mySquares;
 public:
-    
-    void addSquare(Square AddedSquare){
+
+    void addSquare(Square AddedSquare) {
         mySquares.push_back(AddedSquare);
     }
 
-    bool move(int y, const int SCREEN_HEIGHT) {
+    bool move(int y, const int SCREEN_HEIGHT, Piece mainPiece) {
         if (isCollided(SCREEN_HEIGHT))
+            return false;
+        if (isCollided(mainPiece))
             return false;
 
         for (int i = 0; i < mySquares.size(); i++)
@@ -145,14 +172,15 @@ public:
     }
 
     // aggregates the otherPiece to this piece
-    bool addPiece(Piece otherPiece){
-        for(int i=0; i < otherPiece.size(); i++){
+
+    bool addPiece(Piece otherPiece) {
+        for (int i = 0; i < otherPiece.size(); i++) {
             mySquares.push_back(otherPiece[i]);
         }
     };
 
-    void show(SDL_Surface *SQUARES_SURFACES[], SDL_Surface *screen){
-        for(int i=0; i<mySquares.size(); i++){
+    void show(SDL_Surface *SQUARES_SURFACES[], SDL_Surface *screen) {
+        for (int i = 0; i < mySquares.size(); i++) {
             mySquares[i].show(SQUARES_SURFACES, screen);
         }
     };
@@ -160,23 +188,49 @@ public:
     //verify if it collided with bottom
 
     bool isCollided(int SCREEN_HEIGHT) {
-        for (int i = 0; i < mySquares.size(); i++) 
+        for (int i = 0; i < mySquares.size(); i++)
             if (mySquares[i].isCollided(SCREEN_HEIGHT))
                 return true;
-        
+
         return false;
     }
 
     //verify if it collides with the main piece
 
     bool isCollided(Piece mainPiece) {
-
+        for (int i = 0; i < mySquares.size(); i++) {
+            for (int j = 0; j < mainPiece.size(); j++) {
+                if (mySquares[i].isCollided(mainPiece[j]))
+                    return true;
+            }
+        }
+        return false;
     }
-    
-    int size(){
+
+    int size() {
         return mySquares.size();
     }
 
+    Square operator[](int i) {
+        return mySquares[i];
+    }
+
+};
+
+class robot{
+private:
+    SDL_Rect box;
+    int amoutOfShots;
+    int score;
+public:
+    
+    void fire();
+    
+    bool move(int x, int SCREEN_WIDTH, Piece mainPiece);
+    
+    bool isCollided(Square square);
+    
+    void show(SDL_Surface screen);
 };
 
 int init() {
@@ -195,10 +249,10 @@ int init() {
         if (SQUARES_SURFACES[i] == NULL)
             return 1;
     }
-    
+
     // seed the rand function
     srand(clock());
-    
+
     return 0;
 }
 
@@ -216,32 +270,64 @@ void handleHomeScreen() {
                 homeScreen = false;
 }
 
-void createFirstPiece(Piece & myPiece){
-    int color = rand() %5;
-    Square mySquare(0, 0, color);
-    Square mySquare1(16, 0, color);
-    Square mySquare2(16+16, 0, color);
-    Square mySquare3(16+16+16, 0, color);
-    Square mySquare4(16+16+16, 16, color);
-    myPiece.addSquare(mySquare);
-    myPiece.addSquare(mySquare1);
-    myPiece.addSquare(mySquare2);
-    myPiece.addSquare(mySquare3);
-    myPiece.addSquare(mySquare4);
-}
+Piece createRandomPiece() {
+    int type = rand() % 2;
+    int color = rand() % 5;
 
-void createSecondPiece(Piece & myPiece){
-    int color = rand()%5;
-    Square mySquare(0, 0, color);
-    Square mySquare1(16, 0, color);
-    Square mySquare2(16+16, 0, color);
-    Square mySquare3(16+16+16, 0, color);
-    Square mySquare4(16+16+16, 16, color);
+    int randomLeftMargin = 0;
+    int piece_width = 0;
+    Piece myPiece;
+
+    int firstPieceWidth = 48 + SQUARE_WIDTH;
+    int firstPiece[] = {
+        0, 0,
+        16, 0,
+        32, 48,
+        48, 16
+    };
+
+    int secondPieceWidth = 48 + SQUARE_WIDTH;
+    int secondPiece[] = {
+        0, 0,
+        16, 0,
+        32, 0,
+        48, 0,
+        48, 16
+    };
+
+    int thirdPieceWidth = 16 + SQUARE_WIDTH;
+    int thirdPiece[] = {
+        0, 0,
+        0, 16,
+        0, 32,
+        0, 48,
+        16, 48
+    };
+
+    int fourthPieceWidth = 32 + SQUARE_WIDTH;
+    int fourfhPiece[] = {
+        0, 0,
+        0, 16,
+        16, 16,
+        0, 32,
+        0, 48
+    };
+
+    piece_width = (48 + 16);
+    
+    // %16 *16 cast the result to be a multiple of 16.
+    randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16 ) * 16 ;
+    Square mySquare(0 + randomLeftMargin, 0, color);
+    Square mySquare1(16 + randomLeftMargin, 0, color);
+    Square mySquare2(32 + randomLeftMargin, 0, color);
+    Square mySquare3(48 + randomLeftMargin, 0, color);
+    Square mySquare4(48 + randomLeftMargin, 16, color);
     myPiece.addSquare(mySquare);
     myPiece.addSquare(mySquare1);
     myPiece.addSquare(mySquare2);
     myPiece.addSquare(mySquare3);
     myPiece.addSquare(mySquare4);
+    return myPiece;
 }
 
 int main(int argc, char* args[]) {
@@ -250,13 +336,15 @@ int main(int argc, char* args[]) {
         return 1;
 
 
-    Piece myPiece;
-    createFirstPiece(myPiece);
+    Piece dropPiece;
+    dropPiece = createRandomPiece();
+
+    Piece mainPiece;
 
     if (homeScreen)
         applyHomeScreen(screen);
 
-    // starts the clock to cap the fps
+    // starts the clock to cap the frames per second
     Timer delta;
     delta.start();
     long double frame = 0;
@@ -282,10 +370,19 @@ int main(int argc, char* args[]) {
 
         applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
 
-        myPiece.show(SQUARES_SURFACES, screen);
-        
-        myPiece.move(SQUARE_SPEED, SCREEN_HEIGHT);
-        
+        dropPiece.show(SQUARES_SURFACES, screen);
+        dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
+
+        mainPiece.show(SQUARES_SURFACES, screen);
+
+        if (dropPiece.isCollided(SCREEN_HEIGHT) or dropPiece.isCollided(mainPiece)) {
+            mainPiece.addPiece(dropPiece);
+            //
+            // need to verify if I need to delete the dropPiece squares here.
+            // I don't think so, because mainPiece is referring to them.
+            dropPiece = createRandomPiece();
+        }
+
         //Update the screen
         if (SDL_Flip(screen) == -1) {
             return 1;
