@@ -3,6 +3,7 @@
 //add the piece collision with the robot and the fire
 // finish the createRandomPiece function
 // verify leak situations
+// get continuous key pressing to move the robot
 
 //The headers
 #include "SDL/SDL.h"
@@ -400,6 +401,7 @@ int main(int argc, char* args[]) {
             if (!homeScreen)
                 myRobot.handleEvents(SCREEN_WIDTH, mainPiece);
 
+                    
             //If the user has quitted the window
             if (event.type == SDL_QUIT) {
                 //Quit the program
