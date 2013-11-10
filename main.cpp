@@ -1,15 +1,13 @@
 // NOTES
-//Add to the colision of the square, at square.cpp, the robot and the main piece
 
-// TEST Square isCollidWithBotton
-
-
+//add the piece colision with the robot and the fire
 
 //The headers
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
 #include <string>
+#include <vector>
 #include "general_functions.h"
 #include "iostream"
 
@@ -101,19 +99,24 @@ public:
     //Moves the square, return true if it moved (was not collided)
 
     bool move(int y, const int SCREEN_HEIGHT) {
-        if (box.y + box.h + y >= SCREEN_HEIGHT){
-            for(int i = y; i > 0; i--){
-                if (box.y + box.h + y >= SCREEN_HEIGHT){
+        if (box.y + box.h + y >= SCREEN_HEIGHT) {
+            for (int i = y; i > 0; i--) {
+                if (box.y + box.h + y >= SCREEN_HEIGHT) {
                     y -= 1;
-                }else{
+                } else {
                     break;
                 }
             }
         }
-        if(y == 0) return false;
-        
+        if (y == 0) return false;
+
         box.y += y;
         return true;
+    }
+
+    bool isCollided(int SCREEN_HEIGHT) {
+        //the minus one is because the square colides when it is 1 pixel far
+        return (box.y + box.h >= SCREEN_HEIGHT-1);
     }
 
     //Shows the square on the screen
@@ -124,16 +127,57 @@ public:
 
 };
 
-//class Piece {
-//private:
-//    int yVel;
-//    Square mySquares[];
-//        
-//public:
-//    
-//    
-//
-//};
+class Piece {
+private:
+    std::vector<Square> mySquares;
+public:
+    
+    void addSquare(Square AddedSquare){
+        mySquares.push_back(AddedSquare);
+    }
+
+    bool move(int y, const int SCREEN_HEIGHT) {
+        if (isCollided(SCREEN_HEIGHT))
+            return false;
+
+        for (int i = 0; i < mySquares.size(); i++)
+            mySquares[i].move(y, SCREEN_HEIGHT);
+    }
+
+    // aggregates the otherPiece to this piece
+    bool addPiece(Piece otherPiece){
+        for(int i=0; i < otherPiece.size(); i++){
+            mySquares.push_back(otherPiece[i]);
+        }
+    };
+
+    void show(SDL_Surface *SQUARES_SURFACES[], SDL_Surface *screen){
+        for(int i=0; i<mySquares.size(); i++){
+            mySquares[i].show(SQUARES_SURFACES, screen);
+        }
+    };
+
+    //verify if it collided with bottom
+
+    bool isCollided(int SCREEN_HEIGHT) {
+        for (int i = 0; i < mySquares.size(); i++) 
+            if (mySquares[i].isCollided(SCREEN_HEIGHT))
+                return true;
+        
+        return false;
+    }
+
+    //verify if it collides with the main piece
+
+    bool isCollided(Piece mainPiece) {
+
+    }
+    
+    int size(){
+        return mySquares.size();
+    }
+
+};
 
 int init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
@@ -151,6 +195,10 @@ int init() {
         if (SQUARES_SURFACES[i] == NULL)
             return 1;
     }
+    
+    // seed the rand function
+    srand(clock());
+    
     return 0;
 }
 
@@ -168,17 +216,42 @@ void handleHomeScreen() {
                 homeScreen = false;
 }
 
+void createFirstPiece(Piece & myPiece){
+    int color = rand() %5;
+    Square mySquare(0, 0, color);
+    Square mySquare1(16, 0, color);
+    Square mySquare2(16+16, 0, color);
+    Square mySquare3(16+16+16, 0, color);
+    Square mySquare4(16+16+16, 16, color);
+    myPiece.addSquare(mySquare);
+    myPiece.addSquare(mySquare1);
+    myPiece.addSquare(mySquare2);
+    myPiece.addSquare(mySquare3);
+    myPiece.addSquare(mySquare4);
+}
+
+void createSecondPiece(Piece & myPiece){
+    int color = rand()%5;
+    Square mySquare(0, 0, color);
+    Square mySquare1(16, 0, color);
+    Square mySquare2(16+16, 0, color);
+    Square mySquare3(16+16+16, 0, color);
+    Square mySquare4(16+16+16, 16, color);
+    myPiece.addSquare(mySquare);
+    myPiece.addSquare(mySquare1);
+    myPiece.addSquare(mySquare2);
+    myPiece.addSquare(mySquare3);
+    myPiece.addSquare(mySquare4);
+}
+
 int main(int argc, char* args[]) {
 
     if (init() == 1)
         return 1;
 
 
-    Square mySquare(0, 0, 1);
-    Square mySquare1(32, 0, 2);
-    Square mySquare2(32 + 32, 0, 3);
-    Square mySquare3(32+ 32+ 32, 0, 4);
-    Square mySquare4( 32+ 32+ 32+ 32, 0, 0);
+    Piece myPiece;
+    createFirstPiece(myPiece);
 
     if (homeScreen)
         applyHomeScreen(screen);
@@ -209,18 +282,10 @@ int main(int argc, char* args[]) {
 
         applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
 
-        mySquare.show(SQUARES_SURFACES, screen);
-        mySquare1.show(SQUARES_SURFACES, screen);
-        mySquare2.show(SQUARES_SURFACES, screen);
-        mySquare3.show(SQUARES_SURFACES, screen);
-        mySquare4.show(SQUARES_SURFACES, screen);
+        myPiece.show(SQUARES_SURFACES, screen);
         
-        mySquare.move(SQUARE_SPEED, SCREEN_HEIGHT);
-        mySquare1.move(SQUARE_SPEED, SCREEN_HEIGHT);
-        mySquare2.move(SQUARE_SPEED, SCREEN_HEIGHT);
-        mySquare3.move(SQUARE_SPEED, SCREEN_HEIGHT);
-        mySquare4.move(SQUARE_SPEED, SCREEN_HEIGHT);
-
+        myPiece.move(SQUARE_SPEED, SCREEN_HEIGHT);
+        
         //Update the screen
         if (SDL_Flip(screen) == -1) {
             return 1;
@@ -228,14 +293,13 @@ int main(int argc, char* args[]) {
 
         //Increment the frame counter
         frame++;
-        
+
         //If we want to cap the frame rate
-        if( ( delta.get_ticks() < 1000 / FRAMES_PER_SECOND ) )
-        {
+        if ((delta.get_ticks() < 1000 / FRAMES_PER_SECOND)) {
             //Sleep the remaining frame time
-            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - delta.get_ticks() );
+            SDL_Delay((1000 / FRAMES_PER_SECOND) - delta.get_ticks());
         }
-        
+
         //Restart delta timer
         delta.start();
 
