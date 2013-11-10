@@ -36,7 +36,14 @@ const int SQUARE_WIDTH = 16;
 const int SQUARE_HEIGHT = 16;
 const std::string SQUARE_COLORS_FILES[] = {"square_gray.png", "square_pink.png",
     "square_purple.png", "square_red.png", "square_yellow.png"};
-SDL_Surface *SQUARES_SURFACES[] = {NULL, NULL, NULL, NULL, NULL};
+SDL_Surface *squares_surfaces[] = {NULL, NULL, NULL, NULL, NULL};
+
+//the robot
+SDL_Surface *robot_surface = NULL;
+const int ROBOT_WIDTH = 48;
+const int ROBOT_HEIGHT = 48;
+const int ROBOT_START_AMOUNT_OF_SHOTS = 40;
+const int ROBOT_SPEED = 16;
 
 //GAME SETTINGS
 const int SQUARE_SPEED = 4;
@@ -122,7 +129,7 @@ public:
     }
 
     bool isCollided(Square otherSquare) {
-        if(box.x == otherSquare.getx())
+        if (box.x == otherSquare.getx())
             if (box.y + box.h >= otherSquare.gety())
                 return true;
         return false;
@@ -146,8 +153,8 @@ public:
         return box.h;
     }
 
-    void show(SDL_Surface *SQUARES_SURFACES[], SDL_Surface *screen) {
-        apply_surface(box.x, box.y, SQUARES_SURFACES[square_color], screen);
+    void show(SDL_Surface *squares_surfaces[], SDL_Surface *screen) {
+        apply_surface(box.x, box.y, squares_surfaces[square_color], screen);
     }
 
 };
@@ -179,9 +186,9 @@ public:
         }
     };
 
-    void show(SDL_Surface *SQUARES_SURFACES[], SDL_Surface *screen) {
+    void show(SDL_Surface *squares_surfaces[], SDL_Surface *screen) {
         for (int i = 0; i < mySquares.size(); i++) {
-            mySquares[i].show(SQUARES_SURFACES, screen);
+            mySquares[i].show(squares_surfaces, screen);
         }
     };
 
@@ -217,20 +224,46 @@ public:
 
 };
 
-class robot{
+class Robot {
 private:
     SDL_Rect box;
     int amoutOfShots;
     int score;
+    int speed;
+    SDL_Surface *surface;
 public:
-    
+
+    Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, const int ROBOT_SPEED, SDL_Surface *robot_surface) {
+        box.x = (SCREEN_PLAYABLE_WIDTH - ROBOT_WIDTH) / 2;
+        box.y = SCREEN_HEIGHT - ROBOT_HEIGHT;
+        box.w = ROBOT_WIDTH;
+        box.h = ROBOT_HEIGHT;
+        speed = ROBOT_SPEED;
+
+        score = 0;
+        amoutOfShots = ROBOT_START_AMOUNT_OF_SHOTS;
+        surface = robot_surface;
+    };
+
     void fire();
-    
-    bool move(int x, int SCREEN_WIDTH, Piece mainPiece);
-    
+
+    bool move(int x, int SCREEN_WIDTH, Piece mainPiece) {
+        box.x += x;
+    };
+
     bool isCollided(Square square);
-    
-    void show(SDL_Surface screen);
+
+    void show(SDL_Surface *screen) {
+        apply_surface(box.x, box.y, surface, screen);
+    };
+
+    void handleEvents(int SCREEN_WIDTH, Piece mainPiece) {
+        if (event.type == SDL_KEYDOWN)
+            if (event.key.keysym.sym == SDLK_LEFT)
+                move(speed * (-1), SCREEN_WIDTH, mainPiece);
+            else if (event.key.keysym.sym == SDLK_RIGHT)
+                move(speed, SCREEN_WIDTH, mainPiece);
+    }
 };
 
 int init() {
@@ -245,11 +278,15 @@ int init() {
 
     //loads the surfaces of the colored squares
     for (int i = 0; i < sizeof ( SQUARE_COLORS_FILES) / sizeof ( SQUARE_COLORS_FILES[ 0 ]); i++) {
-        SQUARES_SURFACES[i] = load_image(SQUARE_COLORS_FILES[i]);
-        if (SQUARES_SURFACES[i] == NULL)
+        squares_surfaces[i] = load_image(SQUARE_COLORS_FILES[i]);
+        if (squares_surfaces[i] == NULL)
             return 1;
     }
 
+    robot_surface = load_image("robot.png");
+    if (robot_surface == NULL)
+        return 1;
+    
     // seed the rand function
     srand(clock());
 
@@ -257,9 +294,9 @@ int init() {
 }
 
 void clean() {
-    SDL_FreeSurface(screen);
     for (int i = 0; i < sizeof ( SQUARE_COLORS_FILES) / sizeof ( SQUARE_COLORS_FILES[ 0 ]); i++)
-        SDL_FreeSurface(SQUARES_SURFACES[i]);
+        SDL_FreeSurface(squares_surfaces[i]);
+    SDL_FreeSurface(robot_surface);
     SDL_Quit();
 }
 
@@ -314,9 +351,9 @@ Piece createRandomPiece() {
     };
 
     piece_width = (48 + 16);
-    
+
     // %16 *16 cast the result to be a multiple of 16.
-    randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16 ) * 16 ;
+    randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
     Square mySquare(0 + randomLeftMargin, 0, color);
     Square mySquare1(16 + randomLeftMargin, 0, color);
     Square mySquare2(32 + randomLeftMargin, 0, color);
@@ -341,6 +378,8 @@ int main(int argc, char* args[]) {
 
     Piece mainPiece;
 
+    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface);
+
     if (homeScreen)
         applyHomeScreen(screen);
 
@@ -358,6 +397,9 @@ int main(int argc, char* args[]) {
             //verify if space was pressed
             handleHomeScreen();
 
+            if (!homeScreen)
+                myRobot.handleEvents(SCREEN_WIDTH, mainPiece);
+
             //If the user has quitted the window
             if (event.type == SDL_QUIT) {
                 //Quit the program
@@ -370,10 +412,12 @@ int main(int argc, char* args[]) {
 
         applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
 
-        dropPiece.show(SQUARES_SURFACES, screen);
+        dropPiece.show(squares_surfaces, screen);
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
-        mainPiece.show(SQUARES_SURFACES, screen);
+        mainPiece.show(squares_surfaces, screen);
+
+        myRobot.show(screen);
 
         if (dropPiece.isCollided(SCREEN_HEIGHT) or dropPiece.isCollided(mainPiece)) {
             mainPiece.addPiece(dropPiece);
