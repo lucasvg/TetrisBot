@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Timer.o \
 	${OBJECTDIR}/general_functions.o \
 	${OBJECTDIR}/main.o
 
@@ -62,6 +63,11 @@ LDLIBSOPTIONS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lSDL_image
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/learnsdl: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/learnsdl ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Timer.o: Timer.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Timer.o Timer.cpp
 
 ${OBJECTDIR}/general_functions.o: general_functions.cpp 
 	${MKDIR} -p ${OBJECTDIR}

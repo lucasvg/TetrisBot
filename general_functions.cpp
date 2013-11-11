@@ -86,3 +86,25 @@ bool applyGameScreen(SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH) {
     apply_surface(SCREEN_PLAYABLE_WIDTH, 0, divider_bar, screen);
     SDL_FreeSurface(divider_bar);
 }
+
+bool applyGameOverScreen(SDL_Surface *screen){
+    TTF_Init();
+
+    //The font that's going to be used
+
+    TTF_Font *font = NULL;
+    font = TTF_OpenFont("lazy.ttf", 28);
+    if (font == NULL)
+        return false;
+
+    //The color of the font
+    SDL_Color textColor = {255, 255, 255};
+
+    SDL_Surface *message = TTF_RenderText_Solid(font, "GameOver!!! MUHAHAHAHA", textColor);
+    apply_surface(0, 0, message, screen, NULL);
+    SDL_FreeSurface(message);
+
+    TTF_CloseFont(font);
+    TTF_Quit();
+    return true;
+}

@@ -1,9 +1,10 @@
 // NOTES
 
-//add the piece collision with the robot and the fire
+// add the piece collision with the robot and the fire
 // finish the createRandomPiece function
 // verify leak situations
 // get continuous key pressing to move the robot
+// do the fire class
 
 //The headers
 #include "SDL/SDL.h"
@@ -13,9 +14,12 @@
 #include <vector>
 #include "general_functions.h"
 #include "iostream"
+#include "Timer.h"
 
 // handle the exit of the program
 bool quit = false;
+
+bool gameOver = false;
 
 // to show the homeScreen
 bool homeScreen = true;
@@ -51,38 +55,6 @@ const int SQUARE_SPEED = 4;
 
 //the event handler
 SDL_Event event;
-
-// Timer is the clock handler
-
-class Timer {
-private:
-    //The clock time when the timer started
-    int startTicks;
-
-    //The ticks stored when the timer was paused
-    int pausedTicks;
-
-    //The timer status
-    bool paused;
-    bool started;
-
-public:
-    //Initializes variables
-    Timer();
-
-    //The various clock actions
-    void start();
-    void stop();
-    void pause();
-    void unpause();
-
-    //Gets the timer's time
-    int get_ticks();
-
-    //Checks the status of the timer
-    bool is_started();
-    bool is_paused();
-};
 
 // a square is a part of the piece
 
@@ -248,22 +220,70 @@ public:
 
     void fire();
 
-    bool move(int x, int SCREEN_WIDTH, Piece mainPiece) {
+    void move(int x, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece) {
+        // if the robot collides with the borders
+        if ((box.x + x < 0) or (box.x + x + box.w > SCREEN_PLAYABLE_WIDTH))
+            return;
+
+        //if the robot collides with the mainPiece
+        for (int i = 0; i < mainPiece.size(); i++)
+            if (x > 0) {
+                if (isCollidedRight(mainPiece[i]))
+                    return;
+            } else {
+                if (isCollidedLeft(mainPiece[i]))
+                    return;
+            }
+
         box.x += x;
     };
 
-    bool isCollided(Square square);
+    bool isCollidedLeft(Square square) {
+        // if the square is on hight possible to be collided with the robot
+        if (box.y <= square.gety())
+            // is trying to move to left
+            if (((box.x) == (square.getx() + square.getw())))
+                return true;
+
+        return false;
+    }
+
+    bool isCollidedRight(Square square) {
+        // if the square is on hight possible to be collided with the robot
+        if (box.y <= square.gety())
+            // is trying to move to left
+            if ((box.x + box.w) == (square.getx()))
+                return true;
+
+        return false;
+    }
+
+    bool isCollidedTop(Piece piece) {
+        for (int i = 0; i < piece.size(); i++)
+            if (isCollidedTop(piece[i]))
+                return true;
+
+        return false;
+    }
+
+    bool isCollidedTop(Square square) {
+        if ((square.getx() >= box.x) and square.getx() < box.x + box.w)
+            if (square.gety() + square.geth() >= box.y)
+                return true;
+
+        return false;
+    }
 
     void show(SDL_Surface *screen) {
         apply_surface(box.x, box.y, surface, screen);
     };
 
-    void handleEvents(int SCREEN_WIDTH, Piece mainPiece) {
+    void handleEvents(int SCREEN_PLAYABLE_WIDTH, Piece mainPiece) {
         if (event.type == SDL_KEYDOWN)
             if (event.key.keysym.sym == SDLK_LEFT)
-                move(speed * (-1), SCREEN_WIDTH, mainPiece);
+                move(speed * (-1), SCREEN_PLAYABLE_WIDTH, mainPiece);
             else if (event.key.keysym.sym == SDLK_RIGHT)
-                move(speed, SCREEN_WIDTH, mainPiece);
+                move(speed, SCREEN_PLAYABLE_WIDTH, mainPiece);
     }
 };
 
@@ -287,7 +307,7 @@ int init() {
     robot_surface = load_image("robot.png");
     if (robot_surface == NULL)
         return 1;
-    
+
     // seed the rand function
     srand(clock());
 
@@ -368,6 +388,20 @@ Piece createRandomPiece() {
     return myPiece;
 }
 
+bool isGameOver(Robot robot, Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
+    
+    if (robot.isCollidedTop(piece))
+        return true;
+    
+    //if mainPiece has the SCREEN_HEIGHT
+    for(int i = 0; i<mainPiece.size(); i++){
+        if (mainPiece[i].gety() == 0)
+            return true;
+    }
+    
+    return false;
+}
+
 int main(int argc, char* args[]) {
 
     if (init() == 1)
@@ -395,13 +429,17 @@ int main(int argc, char* args[]) {
         //While there's events to handle
         while (SDL_PollEvent(&event)) {
 
-            //verify if space was pressed
-            handleHomeScreen();
+            if (homeScreen) {
+                //is at homeScreen
+                //verify if space was pressed
+                handleHomeScreen();
+            } else if (!gameOver) {
+                //is during the game
+                myRobot.handleEvents(SCREEN_PLAYABLE_WIDTH, mainPiece);
+            } else {
+                //game over
+            }
 
-            if (!homeScreen)
-                myRobot.handleEvents(SCREEN_WIDTH, mainPiece);
-
-                    
             //If the user has quitted the window
             if (event.type == SDL_QUIT) {
                 //Quit the program
@@ -409,13 +447,19 @@ int main(int argc, char* args[]) {
             }
         }
 
-        if (homeScreen)
+        if ((homeScreen) or (gameOver)) {
             continue;
 
-        applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
+        }
 
-        dropPiece.show(squares_surfaces, screen);
+        applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
+        
+        gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
+        if (gameOver)
+            applyGameOverScreen(screen);
+        
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
+        dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
 
@@ -451,79 +495,3 @@ int main(int argc, char* args[]) {
     clean();
 }
 
-Timer::Timer() {
-    //Initialize the variables
-    startTicks = 0;
-    pausedTicks = 0;
-    paused = false;
-    started = false;
-}
-
-void Timer::start() {
-    //Start the timer
-    started = true;
-
-    //Unpause the timer
-    paused = false;
-
-    //Get the current clock time
-    startTicks = SDL_GetTicks();
-}
-
-void Timer::stop() {
-    //Stop the timer
-    started = false;
-
-    //Unpause the timer
-    paused = false;
-}
-
-void Timer::pause() {
-    //If the timer is running and isn't already paused
-    if ((started == true) && (paused == false)) {
-        //Pause the timer
-        paused = true;
-
-        //Calculate the paused ticks
-        pausedTicks = SDL_GetTicks() - startTicks;
-    }
-}
-
-void Timer::unpause() {
-    //If the timer is paused
-    if (paused == true) {
-        //Unpause the timer
-        paused = false;
-
-        //Reset the starting ticks
-        startTicks = SDL_GetTicks() - pausedTicks;
-
-        //Reset the paused ticks
-        pausedTicks = 0;
-    }
-}
-
-int Timer::get_ticks() {
-    //If the timer is running
-    if (started == true) {
-        //If the timer is paused
-        if (paused == true) {
-            //Return the number of ticks when the timer was paused
-            return pausedTicks;
-        } else {
-            //Return the current time minus the start time
-            return SDL_GetTicks() - startTicks;
-        }
-    }
-
-    //If the timer isn't running
-    return 0;
-}
-
-bool Timer::is_started() {
-    return started;
-}
-
-bool Timer::is_paused() {
-    return paused;
-}

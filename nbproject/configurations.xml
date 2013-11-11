@@ -12,6 +12,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Timer.cpp</itemPath>
+      <itemPath>Timer.h</itemPath>
       <itemPath>general_functions.cpp</itemPath>
       <itemPath>general_functions.h</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -48,6 +50,10 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="Timer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="general_functions.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="general_functions.h" ex="false" tool="3" flavor2="0">
@@ -76,6 +82,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Timer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="general_functions.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="general_functions.h" ex="false" tool="3" flavor2="0">
