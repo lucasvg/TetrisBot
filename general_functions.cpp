@@ -69,19 +69,12 @@ bool applyHomeScreen(SDL_Surface *screen) {
     return true;
 }
 
-bool applyGameScreen(SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH) {
-    SDL_Surface *background = NULL;
-    background = load_image("background.png");
-    if (background == NULL) return 1;
+bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH) {
+    
     apply_surface(0, 0, background, screen);
-    SDL_FreeSurface(background);
-    SDL_Surface *divider_bar = NULL;
 
-    // fill the divider_bar white
-    divider_bar = load_image("divider_bar.png");
-    if (divider_bar == NULL) return 1;
     apply_surface(SCREEN_PLAYABLE_WIDTH, 0, divider_bar, screen);
-    SDL_FreeSurface(divider_bar);
+    
 }
 
 bool applyGameOverScreen(SDL_Surface *screen) {

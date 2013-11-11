@@ -36,6 +36,9 @@ public:
     void show(SDL_Surface *screen);
 
     void handleEvents(SDL_Event event ,int SCREEN_PLAYABLE_WIDTH, Piece mainPiece);
+    
+    void shot(SDL_Surface *shot_surface);
+    
 };
 
 #endif	/* ROBOT_H */

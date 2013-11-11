@@ -1,10 +1,10 @@
 // NOTES
 
-// add the piece collision with the robot and the fire
 // finish the createRandomPiece function
 // verify leak situations
 // get continuous key pressing to move the robot
-// do the fire class
+// fix bug on side collision between the piece and robot
+// make the square destructor
 
 //The headers
 #include "SDL/SDL.h"
@@ -17,6 +17,7 @@
 #include "Square.h"
 #include "Piece.h"
 #include "Robot.h"
+#include "Shot.h"
 
 // handle the exit of the program
 bool quit = false;
@@ -47,6 +48,8 @@ SDL_Surface *squares_surfaces[] = {NULL, NULL, NULL, NULL, NULL};
 
 //the robot
 SDL_Surface *robot_surface = NULL;
+const std::string ROBOT_SURFACE_FILE = "robot.png";
+
 const int ROBOT_WIDTH = 48;
 const int ROBOT_HEIGHT = 48;
 const int ROBOT_START_AMOUNT_OF_SHOTS = 40;
@@ -54,6 +57,16 @@ const int ROBOT_SPEED = 16;
 
 //GAME SETTINGS
 const int SQUARE_SPEED = 4;
+
+SDL_Surface *background = NULL;
+const std::string BACKGROUND_FILE = "background.png";
+
+SDL_Surface *divider_bar = NULL;
+const std::string DIVIDER_BAR_FILE = "divider_bar.png";
+
+// shot
+SDL_Surface *shot_surface = NULL;
+const std::string SHOT_SURFACE_FILE = "shot.png";
 
 //the event handler
 SDL_Event event;
@@ -68,6 +81,14 @@ int init() {
 
     SDL_WM_SetCaption(SCREEN_CAPTION, NULL);
 
+    background = load_image(BACKGROUND_FILE);
+    if (background == NULL)
+        return 1;
+    
+    divider_bar = load_image(DIVIDER_BAR_FILE);
+    if (divider_bar == NULL)
+        return 1;
+    
     //loads the surfaces of the colored squares
     for (int i = 0; i < sizeof ( SQUARE_COLORS_FILES) / sizeof ( SQUARE_COLORS_FILES[ 0 ]); i++) {
         squares_surfaces[i] = load_image(SQUARE_COLORS_FILES[i]);
@@ -75,10 +96,14 @@ int init() {
             return 1;
     }
 
-    robot_surface = load_image("robot.png");
+    robot_surface = load_image(ROBOT_SURFACE_FILE);
     if (robot_surface == NULL)
         return 1;
-
+    
+    shot_surface = load_image(SHOT_SURFACE_FILE);
+    if (shot_surface == NULL)
+        return 1;
+    
     return 0;
 }
 
@@ -161,7 +186,7 @@ Piece createRandomPiece() {
 
 bool isGameOver(Robot robot, Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
 
-    if (robot.isCollidingTop(piece))
+    if (robot.isCollidingTop(piece) and !(piece.isColliding(mainPiece)))
         return true;
 
     //if mainPiece has the SCREEN_HEIGHT
@@ -223,17 +248,19 @@ int main(int argc, char* args[]) {
 
         }
 
-        applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
+        applyGameScreen(background, divider_bar , screen, SCREEN_PLAYABLE_WIDTH);
         
         // the game over function needs to be placed after it was checked if the dropPiece is colliding with the mainPiece (in the loop)
         // this ensures the piece will first collide with the mainPiece, and then will not collide with the robot,
         // if robot and mainPiece are at the same hight
+        
+        dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
+
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
         if (gameOver)
             applyGameOverScreen(screen);
         
-        dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
-
+        
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);

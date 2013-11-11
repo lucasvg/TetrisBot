@@ -7,12 +7,8 @@
 
 #include "Shot.h"
 
-Shot::Shot() {
-}
-
-Shot::Shot(const Shot& orig) {
-}
-
-Shot::~Shot() {
-}
-
+Shot::Shot(int x, int y, SDL_Surface* surface){
+      this->x = x;
+      this->y = y;
+      this->surface = surface;      
+  }  

@@ -21,7 +21,7 @@ bool applyHomeScreen(SDL_Surface *screen);
 
 bool applyGameOverScreen(SDL_Surface *screen);
 
-bool applyGameScreen(SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH);
+bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH);
 
 #endif	/* GENERAL_FUNCTIONS_H */
 

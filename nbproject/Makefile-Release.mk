@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Piece.o \
 	${OBJECTDIR}/Robot.o \
+	${OBJECTDIR}/Shot.o \
 	${OBJECTDIR}/Square.o \
 	${OBJECTDIR}/Timer.o \
 	${OBJECTDIR}/general_functions.o \
@@ -76,6 +77,11 @@ ${OBJECTDIR}/Robot.o: Robot.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Robot.o Robot.cpp
+
+${OBJECTDIR}/Shot.o: Shot.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Shot.o Shot.cpp
 
 ${OBJECTDIR}/Square.o: Square.cpp 
 	${MKDIR} -p ${OBJECTDIR}

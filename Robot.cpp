@@ -6,6 +6,7 @@
  */
 
 #include "Robot.h"
+#include "Shot.h"
 
     Robot::Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, 
             const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT) {
