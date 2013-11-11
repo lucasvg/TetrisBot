@@ -10,11 +10,12 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
-#include <string>
 #include <vector>
 #include "general_functions.h"
 #include "iostream"
 #include "Timer.h"
+#include "Square.h"
+#include "Piece.h"
 
 // handle the exit of the program
 bool quit = false;
@@ -55,147 +56,6 @@ const int SQUARE_SPEED = 4;
 
 //the event handler
 SDL_Event event;
-
-// a square is a part of the piece
-
-class Square {
-private:
-    //collision box;
-    //note: also handles the position on screen
-    SDL_Rect box;
-
-    // color of the square
-    int square_color;
-
-public:
-    //Initializes the variables
-
-    Square(int x, int y, int color) {
-        box.x = x;
-        box.y = y;
-        square_color = color;
-        box.w = SQUARE_WIDTH;
-        box.h = SQUARE_HEIGHT;
-    }
-
-    //Moves the square, return true if it moved (was not collided)
-
-    bool move(int y, const int SCREEN_HEIGHT) {
-        if (box.y + box.h + y >= SCREEN_HEIGHT) {
-            for (int i = y; i > 0; i--) {
-                if (box.y + box.h + y >= SCREEN_HEIGHT) {
-                    y -= 1;
-                } else {
-                    break;
-                }
-            }
-        }
-        if (y == 0) return false;
-
-        box.y += y;
-        return true;
-    }
-
-    bool isCollided(int SCREEN_HEIGHT) {
-        //the minus one is because the square colides when it is 1 pixel far
-        return (box.y + box.h >= SCREEN_HEIGHT - 1);
-    }
-
-    bool isCollided(Square otherSquare) {
-        if (box.x == otherSquare.getx())
-            if (box.y + box.h >= otherSquare.gety())
-                return true;
-        return false;
-    }
-
-    //Shows the square on the screen
-
-    int getx() {
-        return box.x;
-    }
-
-    int gety() {
-        return box.y;
-    }
-
-    int getw() {
-        return box.w;
-    }
-
-    int geth() {
-        return box.h;
-    }
-
-    void show(SDL_Surface *squares_surfaces[], SDL_Surface *screen) {
-        apply_surface(box.x, box.y, squares_surfaces[square_color], screen);
-    }
-
-};
-
-class Piece {
-private:
-    std::vector<Square> mySquares;
-public:
-
-    void addSquare(Square AddedSquare) {
-        mySquares.push_back(AddedSquare);
-    }
-
-    bool move(int y, const int SCREEN_HEIGHT, Piece mainPiece) {
-        if (isCollided(SCREEN_HEIGHT))
-            return false;
-        if (isCollided(mainPiece))
-            return false;
-
-        for (int i = 0; i < mySquares.size(); i++)
-            mySquares[i].move(y, SCREEN_HEIGHT);
-    }
-
-    // aggregates the otherPiece to this piece
-
-    bool addPiece(Piece otherPiece) {
-        for (int i = 0; i < otherPiece.size(); i++) {
-            mySquares.push_back(otherPiece[i]);
-        }
-    };
-
-    void show(SDL_Surface *squares_surfaces[], SDL_Surface *screen) {
-        for (int i = 0; i < mySquares.size(); i++) {
-            mySquares[i].show(squares_surfaces, screen);
-        }
-    };
-
-    //verify if it collided with bottom
-
-    bool isCollided(int SCREEN_HEIGHT) {
-        for (int i = 0; i < mySquares.size(); i++)
-            if (mySquares[i].isCollided(SCREEN_HEIGHT))
-                return true;
-
-        return false;
-    }
-
-    //verify if it collides with the main piece
-
-    bool isCollided(Piece mainPiece) {
-        for (int i = 0; i < mySquares.size(); i++) {
-            for (int j = 0; j < mainPiece.size(); j++) {
-                if (mySquares[i].isCollided(mainPiece[j]))
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    int size() {
-        return mySquares.size();
-    }
-
-    Square operator[](int i) {
-        return mySquares[i];
-    }
-
-};
 
 class Robot {
 private:
@@ -308,9 +168,6 @@ int init() {
     if (robot_surface == NULL)
         return 1;
 
-    // seed the rand function
-    srand(clock());
-
     return 0;
 }
 
@@ -373,13 +230,16 @@ Piece createRandomPiece() {
 
     piece_width = (48 + 16);
 
+    // seed the rand function
+    srand(clock());
+    
     // %16 *16 cast the result to be a multiple of 16.
     randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
-    Square mySquare(0 + randomLeftMargin, 0, color);
-    Square mySquare1(16 + randomLeftMargin, 0, color);
-    Square mySquare2(32 + randomLeftMargin, 0, color);
-    Square mySquare3(48 + randomLeftMargin, 0, color);
-    Square mySquare4(48 + randomLeftMargin, 16, color);
+    Square mySquare(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
+    Square mySquare1(16 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
+    Square mySquare2(32 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
+    Square mySquare3(48 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
+    Square mySquare4(48 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT);
     myPiece.addSquare(mySquare);
     myPiece.addSquare(mySquare1);
     myPiece.addSquare(mySquare2);

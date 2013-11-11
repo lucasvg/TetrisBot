@@ -12,6 +12,10 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Piece.cpp</itemPath>
+      <itemPath>Piece.h</itemPath>
+      <itemPath>Square.cpp</itemPath>
+      <itemPath>Square.h</itemPath>
       <itemPath>Timer.cpp</itemPath>
       <itemPath>Timer.h</itemPath>
       <itemPath>general_functions.cpp</itemPath>
@@ -50,6 +54,14 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Piece.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Square.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Square.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Timer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Timer.h" ex="false" tool="3" flavor2="0">
@@ -82,6 +94,14 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Piece.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Square.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Square.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Timer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Timer.h" ex="false" tool="3" flavor2="0">

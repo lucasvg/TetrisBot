@@ -5,6 +5,11 @@
  * Created on November 8, 2013, 6:04 PM
  */
 
+#include <string>
+#include "SDL/SDL.h"
+#include "SDL/SDL_ttf.h"
+#include "SDL/SDL_image.h"
+
 #ifndef GENERAL_FUNCTIONS_H
 #define	GENERAL_FUNCTIONS_H
 

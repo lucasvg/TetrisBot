@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Piece.o \
+	${OBJECTDIR}/Square.o \
 	${OBJECTDIR}/Timer.o \
 	${OBJECTDIR}/general_functions.o \
 	${OBJECTDIR}/main.o
@@ -63,6 +65,16 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/learnsdl: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/learnsdl ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Piece.o: Piece.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Piece.o Piece.cpp
+
+${OBJECTDIR}/Square.o: Square.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Square.o Square.cpp
 
 ${OBJECTDIR}/Timer.o: Timer.cpp 
 	${MKDIR} -p ${OBJECTDIR}

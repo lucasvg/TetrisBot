@@ -5,6 +5,8 @@
  * Created on November 11, 2013, 1:11 PM
  */
 
+#include "SDL/SDL.h"
+
 #ifndef TIMER_H
 #define	TIMER_H
 

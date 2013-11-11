@@ -6,7 +6,6 @@
  */
 
 #include "Timer.h"
-#include "SDL/SDL.h"
 
 Timer::Timer() {
     //Initialize the variables

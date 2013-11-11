@@ -1,7 +1,4 @@
-#include "SDL/SDL.h"
-#include "SDL/SDL_ttf.h"
-#include "SDL/SDL_image.h"
-#include <string>
+#include "general_functions.h"
 
 SDL_Surface *load_image(std::string filename) {
     //The image that's loaded
@@ -32,7 +29,7 @@ SDL_Surface *load_image(std::string filename) {
     return optimizedImage;
 }
 
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL) {
+void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip) {
     //Holds offsets
     SDL_Rect offset;
 
