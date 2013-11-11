@@ -16,6 +16,7 @@
 #include "Timer.h"
 #include "Square.h"
 #include "Piece.h"
+#include "Robot.h"
 
 // handle the exit of the program
 bool quit = false;
@@ -56,96 +57,6 @@ const int SQUARE_SPEED = 4;
 
 //the event handler
 SDL_Event event;
-
-class Robot {
-private:
-    SDL_Rect box;
-    int amoutOfShots;
-    int score;
-    int speed;
-    SDL_Surface *surface;
-public:
-
-    Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, const int ROBOT_SPEED, SDL_Surface *robot_surface) {
-        box.x = (SCREEN_PLAYABLE_WIDTH - ROBOT_WIDTH) / 2;
-        box.y = SCREEN_HEIGHT - ROBOT_HEIGHT;
-        box.w = ROBOT_WIDTH;
-        box.h = ROBOT_HEIGHT;
-        speed = ROBOT_SPEED;
-
-        score = 0;
-        amoutOfShots = ROBOT_START_AMOUNT_OF_SHOTS;
-        surface = robot_surface;
-    };
-
-    void fire();
-
-    void move(int x, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece) {
-        // if the robot collides with the borders
-        if ((box.x + x < 0) or (box.x + x + box.w > SCREEN_PLAYABLE_WIDTH))
-            return;
-
-        //if the robot collides with the mainPiece
-        for (int i = 0; i < mainPiece.size(); i++)
-            if (x > 0) {
-                if (isCollidedRight(mainPiece[i]))
-                    return;
-            } else {
-                if (isCollidedLeft(mainPiece[i]))
-                    return;
-            }
-
-        box.x += x;
-    };
-
-    bool isCollidedLeft(Square square) {
-        // if the square is on hight possible to be collided with the robot
-        if (box.y <= square.gety())
-            // is trying to move to left
-            if (((box.x) == (square.getx() + square.getw())))
-                return true;
-
-        return false;
-    }
-
-    bool isCollidedRight(Square square) {
-        // if the square is on hight possible to be collided with the robot
-        if (box.y <= square.gety())
-            // is trying to move to left
-            if ((box.x + box.w) == (square.getx()))
-                return true;
-
-        return false;
-    }
-
-    bool isCollidedTop(Piece piece) {
-        for (int i = 0; i < piece.size(); i++)
-            if (isCollidedTop(piece[i]))
-                return true;
-
-        return false;
-    }
-
-    bool isCollidedTop(Square square) {
-        if ((square.getx() >= box.x) and square.getx() < box.x + box.w)
-            if (square.gety() + square.geth() >= box.y)
-                return true;
-
-        return false;
-    }
-
-    void show(SDL_Surface *screen) {
-        apply_surface(box.x, box.y, surface, screen);
-    };
-
-    void handleEvents(int SCREEN_PLAYABLE_WIDTH, Piece mainPiece) {
-        if (event.type == SDL_KEYDOWN)
-            if (event.key.keysym.sym == SDLK_LEFT)
-                move(speed * (-1), SCREEN_PLAYABLE_WIDTH, mainPiece);
-            else if (event.key.keysym.sym == SDLK_RIGHT)
-                move(speed, SCREEN_PLAYABLE_WIDTH, mainPiece);
-    }
-};
 
 int init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
@@ -273,7 +184,7 @@ int main(int argc, char* args[]) {
 
     Piece mainPiece;
 
-    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface);
+    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
 
     if (homeScreen)
         applyHomeScreen(screen);
@@ -295,7 +206,7 @@ int main(int argc, char* args[]) {
                 handleHomeScreen();
             } else if (!gameOver) {
                 //is during the game
-                myRobot.handleEvents(SCREEN_PLAYABLE_WIDTH, mainPiece);
+                myRobot.handleEvents(event,SCREEN_PLAYABLE_WIDTH, mainPiece);
             } else {
                 //game over
             }
