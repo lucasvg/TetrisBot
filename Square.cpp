@@ -37,12 +37,12 @@
         return true;
     }
 
-    bool Square::isCollided(int SCREEN_HEIGHT) {
+    bool Square::isColliding(int SCREEN_HEIGHT) {
         //the minus one is because the square colides when it is 1 pixel far
         return (box.y + box.h >= SCREEN_HEIGHT - 1);
     }
 
-    bool Square::isCollided(Square otherSquare) {
+    bool Square::isColliding(Square otherSquare) {
         if (box.x == otherSquare.getx())
             if (box.y + box.h >= otherSquare.gety())
                 return true;

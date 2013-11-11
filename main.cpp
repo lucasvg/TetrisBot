@@ -143,7 +143,7 @@ Piece createRandomPiece() {
 
     // seed the rand function
     srand(clock());
-    
+
     // %16 *16 cast the result to be a multiple of 16.
     randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
     Square mySquare(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
@@ -160,16 +160,16 @@ Piece createRandomPiece() {
 }
 
 bool isGameOver(Robot robot, Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
-    
-    if (robot.isCollidedTop(piece))
+
+    if (robot.isCollidingTop(piece))
         return true;
-    
+
     //if mainPiece has the SCREEN_HEIGHT
-    for(int i = 0; i<mainPiece.size(); i++){
+    for (int i = 0; i < mainPiece.size(); i++) {
         if (mainPiece[i].gety() == 0)
             return true;
     }
-    
+
     return false;
 }
 
@@ -206,7 +206,7 @@ int main(int argc, char* args[]) {
                 handleHomeScreen();
             } else if (!gameOver) {
                 //is during the game
-                myRobot.handleEvents(event,SCREEN_PLAYABLE_WIDTH, mainPiece);
+                myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece);
             } else {
                 //game over
             }
@@ -225,18 +225,22 @@ int main(int argc, char* args[]) {
 
         applyGameScreen(screen, SCREEN_PLAYABLE_WIDTH);
         
+        // the game over function needs to be placed after it was checked if the dropPiece is colliding with the mainPiece (in the loop)
+        // this ensures the piece will first collide with the mainPiece, and then will not collide with the robot,
+        // if robot and mainPiece are at the same hight
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
         if (gameOver)
             applyGameOverScreen(screen);
         
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
+
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
 
         myRobot.show(screen);
 
-        if (dropPiece.isCollided(SCREEN_HEIGHT) or dropPiece.isCollided(mainPiece)) {
+        if (dropPiece.isColliding(SCREEN_HEIGHT) or dropPiece.isColliding(mainPiece)) {
             mainPiece.addPiece(dropPiece);
             //
             // need to verify if I need to delete the dropPiece squares here.

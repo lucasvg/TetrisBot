@@ -30,9 +30,9 @@ public:
 
     bool move(int y, const int SCREEN_HEIGHT);
 
-    bool isCollided(int SCREEN_HEIGHT);
+    bool isColliding(int SCREEN_HEIGHT);
 
-    bool isCollided(Square otherSquare);
+    bool isColliding(Square otherSquare);
 
     int getx();
 

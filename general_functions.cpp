@@ -84,7 +84,7 @@ bool applyGameScreen(SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH) {
     SDL_FreeSurface(divider_bar);
 }
 
-bool applyGameOverScreen(SDL_Surface *screen){
+bool applyGameOverScreen(SDL_Surface *screen) {
     TTF_Init();
 
     //The font that's going to be used

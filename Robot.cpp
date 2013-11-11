@@ -28,17 +28,17 @@
         //if the robot collides with the mainPiece
         for (int i = 0; i < mainPiece.size(); i++)
             if (x > 0) {
-                if (isCollidedRight(mainPiece[i]))
+                if (isCollidingRight(mainPiece[i]))
                     return;
             } else {
-                if (isCollidedLeft(mainPiece[i]))
+                if (isCollidingLeft(mainPiece[i]))
                     return;
             }
 
         box.x += x;
     };
 
-    bool Robot::isCollidedLeft(Square square) {
+    bool Robot::isCollidingLeft(Square square) {
         // if the square is on hight possible to be collided with the robot
         if (box.y <= square.gety())
             // is trying to move to left
@@ -48,7 +48,7 @@
         return false;
     }
 
-    bool Robot::isCollidedRight(Square square) {
+    bool Robot::isCollidingRight(Square square) {
         // if the square is on hight possible to be collided with the robot
         if (box.y <= square.gety())
             // is trying to move to left
@@ -58,15 +58,15 @@
         return false;
     }
 
-    bool Robot::isCollidedTop(Piece piece) {
+    bool Robot::isCollidingTop(Piece piece) {
         for (int i = 0; i < piece.size(); i++)
-            if (isCollidedTop(piece[i]))
+            if (isCollidingTop(piece[i]))
                 return true;
 
         return false;
     }
 
-    bool Robot::isCollidedTop(Square square) {
+    bool Robot::isCollidingTop(Square square) {
         if ((square.getx() >= box.x) and square.getx() < box.x + box.w)
             if (square.gety() + square.geth() >= box.y)
                 return true;

@@ -29,11 +29,11 @@ public:
 
     //verify if it collided with bottom
 
-    bool isCollided(int SCREEN_HEIGHT);
+    bool isColliding(int SCREEN_HEIGHT);
 
     //verify if it collides with the main piece
 
-    bool isCollided(Piece mainPiece);
+    bool isColliding(Piece mainPiece);
 
     int size();
 

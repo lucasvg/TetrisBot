@@ -25,13 +25,13 @@ public:
 
     void move(int x, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece);
 
-    bool isCollidedLeft(Square square);
+    bool isCollidingLeft(Square square);
 
-    bool isCollidedRight(Square square);
+    bool isCollidingRight(Square square);
 
-    bool isCollidedTop(Piece piece);
+    bool isCollidingTop(Piece piece);
 
-    bool isCollidedTop(Square square);
+    bool isCollidingTop(Square square);
 
     void show(SDL_Surface *screen);
 
