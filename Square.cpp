@@ -19,9 +19,7 @@
         box.h = SQUARE_HEIGHT;
     }
 
-    //Moves the square, return true if it moved (was not collided)
-
-    bool Square::move(int y, const int SCREEN_HEIGHT) {
+    void Square::move(int y, const int SCREEN_HEIGHT) {
         if (box.y + box.h + y >= SCREEN_HEIGHT) {
             for (int i = y; i > 0; i--) {
                 if (box.y + box.h + y >= SCREEN_HEIGHT) {
@@ -31,10 +29,7 @@
                 }
             }
         }
-        if (y == 0) return false;
-
-        box.y += y;
-        return true;
+        box.y += y;        
     }
 
     bool Square::isColliding(int SCREEN_HEIGHT) {
@@ -49,8 +44,6 @@
         return false;
     }
 
-    //Shows the square on the screen
-
     int Square::getx() {
         return box.x;
     }
@@ -58,7 +51,7 @@
     int Square::gety() {
         return box.y;
     }
-
+    
     int Square::getw() {
         return box.w;
     }

@@ -12,13 +12,14 @@
 #ifndef SQUARE_H
 #define	SQUARE_H
 
+// this is a square. It compounds the piece
 class Square {
 private:
     //collision box;
     //note: also handles the position on screen
     SDL_Rect box;
 
-    // color of the square
+    //color of the square
     int square_color;
 
 public:
@@ -27,19 +28,24 @@ public:
     Square(int x, int y, int color, const int SQUARE_WIDTH, const int SQUARE_HEIGHT);
 
     //Moves the square, return true if it moved (was not collided)
+    void move(int y, const int SCREEN_HEIGHT);
 
-    bool move(int y, const int SCREEN_HEIGHT);
-
+    // if the square is colliding with the bottom of the screen
     bool isColliding(int SCREEN_HEIGHT);
 
+    // if the square is colliding of other square
     bool isColliding(Square otherSquare);
 
+    // returns the x postion of the square
     int getx();
 
+    // returns the y postion of the square
     int gety();
 
+    // returns the width of the square
     int getw();
 
+    // returns the height of the square
     int geth();
 
     //Shows the square on the screen

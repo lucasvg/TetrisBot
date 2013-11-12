@@ -118,6 +118,7 @@ const std::string SHOT_SURFACE_FILE = "shot.png";
 SDL_Event event;
 
 // starts the SDL, loads all the files
+
 int init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
         return 1;
@@ -131,11 +132,11 @@ int init() {
     background = load_image(BACKGROUND_FILE);
     if (background == NULL)
         return 1;
-    
+
     divider_bar = load_image(DIVIDER_BAR_FILE);
     if (divider_bar == NULL)
         return 1;
-    
+
     //loads the surfaces of the colored squares
     for (int i = 0; i < sizeof ( SQUARE_COLORS_FILES) / sizeof ( SQUARE_COLORS_FILES[ 0 ]); i++) {
         squares_surfaces[i] = load_image(SQUARE_COLORS_FILES[i]);
@@ -146,15 +147,16 @@ int init() {
     robot_surface = load_image(ROBOT_SURFACE_FILE);
     if (robot_surface == NULL)
         return 1;
-    
+
     shot_surface = load_image(SHOT_SURFACE_FILE);
     if (shot_surface == NULL)
         return 1;
-    
+
     return 0;
 }
 
 // frees the memory
+
 void clean() {
     for (int i = 0; i < sizeof ( SQUARE_COLORS_FILES) / sizeof ( SQUARE_COLORS_FILES[ 0 ]); i++)
         SDL_FreeSurface(squares_surfaces[i]);
@@ -167,6 +169,7 @@ void clean() {
 }
 
 // returns a random random piece
+
 Piece createRandomPiece() {
     int type = rand() % 2;
     int color = rand() % 5;
@@ -231,6 +234,7 @@ Piece createRandomPiece() {
 }
 
 // returns if it is gameOver
+
 bool isGameOver(Robot robot, Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
 
     if (robot.isCollidingTop(piece) and !(piece.isColliding(mainPiece)))
@@ -250,10 +254,11 @@ int main(int argc, char* args[]) {
     if (init() == 1)
         return 1;
 
-
+    // dropPiece is the piece that is falling down
     Piece dropPiece;
     dropPiece = createRandomPiece();
 
+    // the mainPiece is compounded by the dropPieces that already fell
     Piece mainPiece;
 
     Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
@@ -261,7 +266,7 @@ int main(int argc, char* args[]) {
     if (homeScreen)
         applyHomeScreen(screen);
 
-    // starts the clock to cap the frames per second
+    // starts the clock "delta" and counter "frame" to cap the frames per second
     Timer delta;
     delta.start();
     long double frame = 0;
@@ -272,12 +277,13 @@ int main(int argc, char* args[]) {
         //While there's events to handle
         while (SDL_PollEvent(&event)) {
 
+            //if is at homeScreen
             if (homeScreen) {
-                //is at homeScreen
                 //verify if space was pressed
                 handleHomeScreen(event, homeScreen);
+
+                // if is not at gameOver == is at game playing mode
             } else if (!gameOver) {
-                //is during the game
                 myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece);
             } else {
                 //game over
@@ -290,24 +296,20 @@ int main(int argc, char* args[]) {
             }
         }
 
+        // only pass of this part if is during the game
         if ((homeScreen) or (gameOver)) {
             continue;
-
         }
 
-        applyGameScreen(background, divider_bar , screen, SCREEN_PLAYABLE_WIDTH);
-        
-        // the game over function needs to be placed after it was checked if the dropPiece is colliding with the mainPiece (in the loop)
-        // this ensures the piece will first collide with the mainPiece, and then will not collide with the robot,
-        // if robot and mainPiece are at the same hight
-        
+        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH);
+
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
+        
         if (gameOver)
             applyGameOverScreen(screen);
-        
-        
+
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
@@ -316,9 +318,6 @@ int main(int argc, char* args[]) {
 
         if (dropPiece.isColliding(SCREEN_HEIGHT) or dropPiece.isColliding(mainPiece)) {
             mainPiece.addPiece(dropPiece);
-            //
-            // need to verify if I need to delete the dropPiece squares here.
-            // I don't think so, because mainPiece is referring to them.
             dropPiece = createRandomPiece();
         }
 
@@ -327,16 +326,13 @@ int main(int argc, char* args[]) {
             return 1;
         }
 
-        //Increment the frame counter
+        
+        // this is to cap the frame rate at FRAMES_PER_SECOND limit
         frame++;
-
-        //If we want to cap the frame rate
         if ((delta.get_ticks() < 1000 / FRAMES_PER_SECOND)) {
             //Sleep the remaining frame time
             SDL_Delay((1000 / FRAMES_PER_SECOND) - delta.get_ticks());
         }
-
-        //Restart delta timer
         delta.start();
 
     }

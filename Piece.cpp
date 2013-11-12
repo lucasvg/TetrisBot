@@ -21,8 +21,6 @@ bool Piece::move(int y, const int SCREEN_HEIGHT, Piece mainPiece) {
         mySquares[i].move(y, SCREEN_HEIGHT);
 }
 
-// aggregates the otherPiece to this piece
-
 bool Piece::addPiece(Piece otherPiece) {
     for (int i = 0; i < otherPiece.size(); i++) {
         mySquares.push_back(otherPiece[i]);
@@ -35,8 +33,6 @@ void Piece::show(SDL_Surface *squares_surfaces[], SDL_Surface *screen) {
     }
 };
 
-//verify if it collided with bottom
-
 bool Piece::isColliding(int SCREEN_HEIGHT) {
     for (int i = 0; i < mySquares.size(); i++)
         if (mySquares[i].isColliding(SCREEN_HEIGHT))
@@ -44,8 +40,6 @@ bool Piece::isColliding(int SCREEN_HEIGHT) {
 
     return false;
 }
-
-//verify if it collides with the main piece
 
 bool Piece::isColliding(Piece mainPiece) {
     for (int i = 0; i < mySquares.size(); i++) {
