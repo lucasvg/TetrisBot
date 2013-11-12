@@ -98,3 +98,10 @@ bool applyGameOverScreen(SDL_Surface *screen) {
     TTF_Quit();
     return true;
 }
+
+void handleHomeScreen(SDL_Event event, bool & homeScreen) {
+    if (homeScreen)
+        if (event.type == SDL_KEYDOWN)
+            if (event.key.keysym.sym == SDLK_SPACE)
+                homeScreen = false;
+}
