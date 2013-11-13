@@ -5,9 +5,9 @@
  * Created on November 11, 2013, 3:49 PM
  */
 
-#include <vector>
 #include <SDL/SDL.h>
 #include "Square.h"
+#include <vector>
 
 #ifndef PIECE_H
 #define	PIECE_H

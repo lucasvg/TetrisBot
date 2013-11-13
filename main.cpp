@@ -25,6 +25,7 @@
 #include "Piece.h"
 #include "Robot.h"
 #include "Shot.h"
+#include "ShotsOnTheWorld.h"
 
 // handle the game state of quit- do not change!
 bool quit = false;
@@ -74,13 +75,13 @@ SDL_Surface *divider_bar = NULL;
 // filename of the surface of the divider_bar
 const std::string DIVIDER_BAR_FILE = "divider_bar.png";
 
-// the width of the square
+// the width of the square   // shouldn't be const
 const int SQUARE_WIDTH = 16;
 
-// the height of the square
+// the height of the square  // shouldn't be const
 const int SQUARE_HEIGHT = 16;
 
-// the velocity of the square falls - in pixels
+// the velocity of the square falls - in pixels   // shouldn't be const
 const int SQUARE_SPEED = 4;
 
 // the files names of the squares surfaces
@@ -96,20 +97,29 @@ SDL_Surface *robot_surface = NULL;
 // filename of the robot surface
 const std::string ROBOT_SURFACE_FILE = "robot.png";
 
-// width of the robot box collision
+// width of the robot box collision   // shouldn't be const
 const int ROBOT_WIDTH = 48;
 
-// height of the robot box collision
+// height of the robot box collision  // shouldn't be const
 const int ROBOT_HEIGHT = 48;
 
 // the amount of shots the robot starts with
 const int ROBOT_START_AMOUNT_OF_SHOTS = 40;
 
-// the velocity of the robot moves [left || right]], in pixels
+// the velocity of the robot moves [left || right]], in pixels  // shouldn't be const
 const int ROBOT_SPEED = 16;
 
 // stores the shot surface
 SDL_Surface *shot_surface = NULL;
+
+int shot_width = 16;
+
+int shot_height = 16; 
+
+int shot_velx = 0;
+
+int shot_vely = -16;
+
 
 // filename of the shot surface
 const std::string SHOT_SURFACE_FILE = "shot.png";
@@ -261,7 +271,11 @@ int main(int argc, char* args[]) {
     // the mainPiece is compounded by the dropPieces that already fell
     Piece mainPiece;
 
-    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
+    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, 
+            SCREEN_HEIGHT, shot_width, shot_height, shot_velx, shot_vely, shot_surface);
+    
+    ShotsOnTheWorld shotsOnTetrisBot(SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
+    
 
     if (homeScreen)
         applyHomeScreen(screen);
@@ -270,7 +284,7 @@ int main(int argc, char* args[]) {
     Timer delta;
     delta.start();
     long double frame = 0;
-
+    
     //While the user hasn't quit
     while (quit == false) {
 
@@ -284,7 +298,7 @@ int main(int argc, char* args[]) {
 
                 // if is not at gameOver == is at game playing mode
             } else if (!gameOver) {
-                myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece);
+                myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece, shotsOnTetrisBot);
             } else {
                 //game over
             }
@@ -305,15 +319,19 @@ int main(int argc, char* args[]) {
 
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
+        shotsOnTetrisBot.moveShots(dropPiece, mainPiece);
+        
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
         
         if (gameOver)
             applyGameOverScreen(screen);
-
+       
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
 
+        shotsOnTetrisBot.show(screen);
+        
         myRobot.show(screen);
 
         if (dropPiece.isColliding(SCREEN_HEIGHT) or dropPiece.isColliding(mainPiece)) {
