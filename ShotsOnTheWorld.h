@@ -21,7 +21,7 @@ public:
 
     void newShot(Shot shot);
 
-    void moveShots(Piece piece, Piece mainPiece);
+    void moveShots(Piece & piece, Piece & mainPiece);
     
     void show(SDL_Surface *screen);
 

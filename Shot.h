@@ -22,9 +22,7 @@ public:
 
     Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface);
 
-    bool move(Piece piece, Piece mainPiece, const int SCREEN_HEIGHT);
-
-    bool isCollided(Piece piece);
+    void move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT);
 
     bool isCollided(Square square);
 

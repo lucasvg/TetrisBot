@@ -5,6 +5,8 @@
  * Created on November 11, 2013, 3:49 PM
  */
 
+#include <iostream>
+
 #include "Piece.h"
 
 void Piece::addSquare(Square AddedSquare) {
@@ -53,6 +55,12 @@ bool Piece::isColliding(Piece mainPiece) {
 
 int Piece::size() {
     return mySquares.size();
+}
+
+void Piece::deleteSquare(int i) {
+    mySquares.erase(mySquares.begin() + i);
+    using namespace std;
+    cout << "detelef" << endl;
 }
 
 Square Piece::operator[](int i) {

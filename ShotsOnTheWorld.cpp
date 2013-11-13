@@ -16,7 +16,7 @@ void ShotsOnTheWorld::newShot(Shot shot) {
     shotsAlive.push_back(shot);
 }
 
-void ShotsOnTheWorld::moveShots(Piece piece, Piece mainPiece) {
+void ShotsOnTheWorld::moveShots(Piece & piece, Piece & mainPiece) {
     for (int i = 0; i < shotsAlive.size(); i++) {
         shotsAlive[i].move(piece, mainPiece, WORLD_HEIGHT);
         if(shotsAlive[i].gety()<0)

@@ -38,6 +38,8 @@ public:
 
     // returns the number of square
     int size();
+    
+    void deleteSquare(int i);
 
     // returns the square of index i
     Square operator[](int i);

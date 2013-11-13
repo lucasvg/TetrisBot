@@ -19,7 +19,23 @@ Shot::Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface)
     this->surface = surface;
 };
 
-bool Shot::move(Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
+void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
+
+    for (int i = 0; i < piece.size(); i++) {
+        if (isCollided(piece[i])) {
+            this->box.y = -1;
+            piece.deleteSquare(i);
+            return;
+        }
+    }
+
+    for (int i = 0; i < mainPiece.size(); i++) {
+        if (isCollided(mainPiece[i])) {
+            this->box.y = -1;
+            mainPiece.deleteSquare(i);
+            return;
+        }
+    }
 
     this->box.x += velx;
     this->box.y += vely;
@@ -32,15 +48,14 @@ bool Shot::move(Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
 
 }
 
-bool Shot::isCollided(Piece piece) {
-
-};
-
 bool Shot::isCollided(Square square) {
-
+    if (box.x == square.getx())
+        if ((box.y <= square.gety()) and (box.y + box.h >= square.gety()))
+            return true;
+    return false;
 };
 
-void Shot::show(SDL_Surface *screen) {
+void Shot::show(SDL_Surface * screen) {
     apply_surface(box.x, box.y, surface, screen);
     using namespace std;
     cout << "x=" << box.x << " y=" << box.y << "w=" << box.w << "h=" << box.h << endl;
