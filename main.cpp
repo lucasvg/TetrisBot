@@ -6,12 +6,16 @@
 // DEFINITIONS
 
 // already need to do
+//      How can I make the connection between the robot and the shot?
+//      Shot should have a reference to the robot who shot it
+//      but if the robot file imports shot, how can the shot refer to the robot too
+//      what would be the good approach here?
+
 
 // finish the createRandomPiece function
 // verify leak situations
 // get continuous key pressing to move the robot
 // fix bug on side collision between the piece and robot
-// make the square destructor
 
 //The headers
 #include "SDL/SDL.h"
@@ -322,7 +326,7 @@ int main(int argc, char* args[]) {
             continue;
         }
 
-        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH);
+        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH, myRobot.getScore());
 
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
@@ -368,4 +372,3 @@ int main(int argc, char* args[]) {
 
     clean();
 }
-

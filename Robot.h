@@ -71,6 +71,10 @@ public:
     // handles events [ if the user pressed left or right ] ]
     void handleEvents(SDL_Event event ,int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld);
     
+    int getScore();
+    
+    void scored();
+    
 };
 
 #endif	/* ROBOT_H */

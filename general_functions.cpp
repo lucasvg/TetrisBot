@@ -1,4 +1,7 @@
+#include <iostream>
+
 #include "general_functions.h"
+#include <sstream>
 
 SDL_Surface *load_image(std::string filename) {
     //The image that's loaded
@@ -47,34 +50,77 @@ bool applyHomeScreen(SDL_Surface *screen) {
 
     //The font that's going to be used
 
+    TTF_Font *fontTitle = NULL;
     TTF_Font *font = NULL;
-    font = TTF_OpenFont("lazy.ttf", 28);
-    if (font == NULL)
+    
+    fontTitle = TTF_OpenFont("lazy.ttf", 36);
+    font = TTF_OpenFont("lazy.ttf", 20);
+    if ((fontTitle == NULL) or (font == NULL))
         return false;
 
     //The color of the font
     SDL_Color textColor = {255, 255, 255};
 
-    SDL_Surface *message = TTF_RenderText_Solid(font, "The quick brown fox jumps over the lazy dog", textColor);
-    apply_surface(0, 0, message, screen, NULL);
+    SDL_Surface *message = TTF_RenderText_Solid(fontTitle, "TetrisBot", textColor);
+    apply_surface(0, 0, message, screen);
+    SDL_FreeSurface(message);
+    
+    message = TTF_RenderText_Solid(font, "Use left and right arrow to move the robot", textColor);
+    apply_surface(0, message->h * 3, message, screen);
     SDL_FreeSurface(message);
 
+    message = TTF_RenderText_Solid(font, "Use space to shoot", textColor);
+    apply_surface(0, message->h * 4, message, screen);
+    SDL_FreeSurface(message);
+    
     message = TTF_RenderText_Solid(font, "press space to continue", textColor);
-    apply_surface(0, message->h * 2, message, screen);
-
+    apply_surface(0, message->h * 7, message, screen);
     SDL_FreeSurface(message);
 
+    TTF_CloseFont(fontTitle);
     TTF_CloseFont(font);
     TTF_Quit();
     return true;
 }
 
-bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH) {
+bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH, 
+        const int SCORE) {
     
     apply_surface(0, 0, background, screen);
 
     apply_surface(SCREEN_PLAYABLE_WIDTH, 0, divider_bar, screen);
     
+    
+    TTF_Init();
+    TTF_Font *font = NULL;
+    font = TTF_OpenFont("lazy.ttf", 25);
+    
+    if (font == NULL)
+        return false;
+    
+    SDL_Color textColor = {255, 255, 255};
+    SDL_Surface * message = NULL;
+    message = TTF_RenderText_Solid(font, "Score:", textColor);
+    if (message == NULL)
+        return false;
+    apply_surface((SCREEN_PLAYABLE_WIDTH + 10), (message->h), message, screen);
+    SDL_FreeSurface(message);
+    message = NULL;
+    using namespace std;
+    
+    using namespace std;
+    stringstream ss;
+    ss << SCORE;
+    message = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
+    if (message == NULL)
+        return false;
+    apply_surface((SCREEN_PLAYABLE_WIDTH + 10), (message->h * 2), message, screen);
+    SDL_FreeSurface(message);
+    
+    
+    TTF_CloseFont(font);
+    TTF_Quit();
+    return true;
 }
 
 bool applyGameOverScreen(SDL_Surface *screen) {

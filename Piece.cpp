@@ -59,8 +59,6 @@ int Piece::size() {
 
 void Piece::deleteSquare(int i) {
     mySquares.erase(mySquares.begin() + i);
-    using namespace std;
-    cout << "detelef" << endl;
 }
 
 Square Piece::operator[](int i) {

@@ -26,7 +26,7 @@ bool applyHomeScreen(SDL_Surface *screen);
 bool applyGameOverScreen(SDL_Surface *screen);
 
 // prints the game running screen on screen
-bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH);
+bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH, const int SCORE);
 
 // determines if the homeScreen should be shown
 void handleHomeScreen(SDL_Event event, bool & homeScreen);

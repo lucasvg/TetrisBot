@@ -101,3 +101,11 @@ void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainP
             shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface));
 
 }
+
+int Robot::getScore(){
+    return score;
+}
+
+void Robot::scored(){
+    score++;
+}

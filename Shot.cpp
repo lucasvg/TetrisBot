@@ -57,8 +57,6 @@ bool Shot::isCollided(Square square) {
 
 void Shot::show(SDL_Surface * screen) {
     apply_surface(box.x, box.y, surface, screen);
-    using namespace std;
-    cout << "x=" << box.x << " y=" << box.y << "w=" << box.w << "h=" << box.h << endl;
 };
 
 int Shot::getx() {
