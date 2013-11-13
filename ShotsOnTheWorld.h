@@ -26,8 +26,6 @@ public:
     void show(SDL_Surface *screen);
 
     bool isCollided(Square);
-
-    void deleteShot();
     
     int size(){
         return shotsAlive.size();

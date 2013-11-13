@@ -82,7 +82,7 @@ const int SQUARE_WIDTH = 16;
 const int SQUARE_HEIGHT = 16;
 
 // the velocity of the square falls - in pixels   // shouldn't be const
-const int SQUARE_SPEED = 4;
+const int SQUARE_SPEED = 2;
 
 // the files names of the squares surfaces
 const std::string SQUARE_COLORS_FILES[] = {"square_gray.png", "square_pink.png",
@@ -106,6 +106,9 @@ const int ROBOT_HEIGHT = 48;
 // the amount of shots the robot starts with
 const int ROBOT_START_AMOUNT_OF_SHOTS = 40;
 
+// position of the gun relative to the position of the robot
+int robot_gun_position = 16;
+
 // the velocity of the robot moves [left || right]], in pixels  // shouldn't be const
 const int ROBOT_SPEED = 16;
 
@@ -118,7 +121,7 @@ int shot_height = 16;
 
 int shot_velx = 0;
 
-int shot_vely = -16;
+int shot_vely = -8;
 
 
 // filename of the shot surface
@@ -271,7 +274,7 @@ int main(int argc, char* args[]) {
     // the mainPiece is compounded by the dropPieces that already fell
     Piece mainPiece;
 
-    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, 
+    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, robot_gun_position, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, 
             SCREEN_HEIGHT, shot_width, shot_height, shot_velx, shot_vely, shot_surface);
     
     ShotsOnTheWorld shotsOnTetrisBot(SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);

@@ -10,22 +10,23 @@
 #include "Robot.h"
 #include "ShotsOnTheWorld.h"
 
-Robot::Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS,
-        const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT, 
-         int shot_width, int shot_height, int shot_velx, int shot_vely, SDL_Surface *shot_surface){
-    
+Robot::Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, int robot_gun_position,
+        const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT,
+        int shot_width, int shot_height, int shot_velx, int shot_vely, SDL_Surface *shot_surface)
+        : ROBOT_GUN_POSITION(robot_gun_position) {
+
     box.x = (SCREEN_PLAYABLE_WIDTH - ROBOT_WIDTH) / 2;
     box.y = SCREEN_HEIGHT - ROBOT_HEIGHT;
     box.w = ROBOT_WIDTH;
     box.h = ROBOT_HEIGHT;
     speed = ROBOT_SPEED;
-    
+
     this->shot_width = shot_width;
     this->shot_height = shot_height;
     this->shot_velx = shot_velx;
     this->shot_vely = shot_vely;
     this->shot_surface = shot_surface;
-            
+
     score = 0;
     amoutOfShots = ROBOT_START_AMOUNT_OF_SHOTS;
     surface = robot_surface;
@@ -97,6 +98,6 @@ void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainP
             move(speed, SCREEN_PLAYABLE_WIDTH, mainPiece);
         else if (event.key.keysym.sym == SDLK_SPACE)
             // shoot
-            shotsOnTheWorld.newShot(Shot(box.x, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface));
-            
+            shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface));
+
 }

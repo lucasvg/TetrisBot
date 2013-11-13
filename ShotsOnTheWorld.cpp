@@ -19,6 +19,8 @@ void ShotsOnTheWorld::newShot(Shot shot) {
 void ShotsOnTheWorld::moveShots(Piece piece, Piece mainPiece) {
     for (int i = 0; i < shotsAlive.size(); i++) {
         shotsAlive[i].move(piece, mainPiece, WORLD_HEIGHT);
+        if(shotsAlive[i].gety()<0)
+            shotsAlive.erase(shotsAlive.begin()+i);
     }
 }
 
@@ -29,5 +31,3 @@ void ShotsOnTheWorld::show(SDL_Surface *screen){
 }
 
 bool isCollided(Square);
-
-void deleteShot();

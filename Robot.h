@@ -21,6 +21,7 @@ private:
     int amoutOfShots;
     int score;
     int speed;
+    const int ROBOT_GUN_POSITION;
     SDL_Surface *surface;
     
     
@@ -30,8 +31,8 @@ private:
     
 public:
 
-    Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, const int ROBOT_SPEED, 
-            SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT, 
+    Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, int robot_gun_position,
+            const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT, 
             int shot_width, int shot_height, int shot_velx, int shot_vely, SDL_Surface *shot_surface);
 
     // the moves the robot only on axis x
