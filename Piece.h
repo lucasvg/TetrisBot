@@ -15,6 +15,7 @@
 // a piece is a composed by various squares
 class Piece {
 private:
+    // the group of squares that compound the piece
     std::vector<Square> mySquares;
 public:
 
@@ -39,6 +40,7 @@ public:
     // returns the number of square
     int size();
     
+    // deletes the square with index "i"
     void deleteSquare(int i);
 
     // returns the square of index i

@@ -17,20 +17,35 @@
 // the robot is the player
 class Robot {
 private:
+    // the collision box of the robot
     SDL_Rect box;
+    
+    // the amount of shots that the robot have
     int amoutOfShots;
+    
+    // the score the robot accumulated
     int score;
+    
+    // the speed the robot moves (left | right)
     int speed;
-    const int ROBOT_GUN_POSITION;
+    
+    // the surface of the robot
     SDL_Surface *surface;
     
+    // the position of the gun, relative to the robot body
+    const int ROBOT_GUN_POSITION;
     
+    // the width and height of the gun shot (will be used for the collision)
     int shot_width, shot_height;
+    
+    // the velocity of the gun shot [x and y axis]
     int shot_velx, shot_vely;
+    
+    // the surface of the gun shot
     SDL_Surface *shot_surface;
     
 public:
-
+    //constructor
     Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, int robot_gun_position,
             const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT, 
             int shot_width, int shot_height, int shot_velx, int shot_vely, SDL_Surface *shot_surface);

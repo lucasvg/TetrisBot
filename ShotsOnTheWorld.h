@@ -11,22 +11,32 @@
 #ifndef SHOTSONTHEWORLD_H
 #define	SHOTSONTHEWORLD_H
 
+// this class handles all the shots on the screen
 class ShotsOnTheWorld {
 private:
+    // group of shots on the screen
     std::vector<Shot> shotsAlive;
+    
+    // this limits the area where the shots can be
     const int WORLD_WIDTH, WORLD_HEIGHT;
 public:
 
+    // constructor
     ShotsOnTheWorld(const int WORLD_WIDTH, const int WORLD_HEIGHT);
 
+    // add a "shot" to the group of shots
     void newShot(Shot shot);
 
+    // it moves the shots
     void moveShots(Piece & piece, Piece & mainPiece);
     
+    // it shows the shots on "screen"
     void show(SDL_Surface *screen);
 
+    // it verifies if any shot is collided with any square of piece or mainPiece
     bool isCollided(Square);
     
+    // returns the amount of shots
     int size(){
         return shotsAlive.size();
     }

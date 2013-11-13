@@ -115,14 +115,17 @@ const int ROBOT_SPEED = 16;
 // stores the shot surface
 SDL_Surface *shot_surface = NULL;
 
+// the width of the shot
 int shot_width = 16;
 
+// the height of the shot
 int shot_height = 16; 
 
+// the shot horizontal velocity of the shot
 int shot_velx = 0;
 
+// the shot vertical velocity - it is negative because the shot goes from bottom to top
 int shot_vely = -8;
-
 
 // filename of the shot surface
 const std::string SHOT_SURFACE_FILE = "shot.png";
@@ -274,12 +277,13 @@ int main(int argc, char* args[]) {
     // the mainPiece is compounded by the dropPieces that already fell
     Piece mainPiece;
 
+    // instance of the robot - the player
     Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, robot_gun_position, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, 
             SCREEN_HEIGHT, shot_width, shot_height, shot_velx, shot_vely, shot_surface);
     
+    // this handles the shots on the screen
     ShotsOnTheWorld shotsOnTetrisBot(SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
-    
-
+   
     if (homeScreen)
         applyHomeScreen(screen);
 
@@ -323,6 +327,10 @@ int main(int argc, char* args[]) {
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
         shotsOnTetrisBot.moveShots(dropPiece, mainPiece);
+        
+        // if the dropPiece was completely destroyed
+        if(dropPiece.size() == 0)
+            dropPiece = createRandomPiece();
         
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
         
