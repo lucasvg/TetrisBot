@@ -16,8 +16,8 @@
 // fix bug on side collision between the piece and robot
 // the next piece display
 // the score thing
-// implement the rotate
-
+// implement the serial.h + serial.cpp
+// implement the rotate - rotozoomSurface faz isso pra voce http://www.ferzkopp.net/Software/SDL_gfx-2.0/Docs/html/_s_d_l__rotozoom_8h.html
 
 //The headers
 #include "SDL/SDL.h"

@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=learnsdl
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/learnsdl
+CND_ARTIFACT_NAME_Debug=tetrisbot
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/tetrisbot
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=learnsdl.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/learnsdl.tar
+CND_PACKAGE_NAME_Debug=tetrisbot.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/tetrisbot.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=learnsdl
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/learnsdl
+CND_ARTIFACT_NAME_Release=tetrisbot
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/tetrisbot
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=learnsdl.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/learnsdl.tar
+CND_PACKAGE_NAME_Release=tetrisbot.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/tetrisbot.tar
 #
 # include compiler specific variables
 #

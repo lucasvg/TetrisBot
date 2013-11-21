@@ -75,7 +75,6 @@ bool applyHomeScreen(SDL_Surface *screen, SDL_Surface *background, std::string r
     distance += 3;    
     std::stringstream ss;
     ss << "Path to robot device: " << robotDevicePath;
-    std::cout << ss.str().c_str()  << std::endl;
     
     message = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
     apply_surface(0, message->h * distance, message, screen);
