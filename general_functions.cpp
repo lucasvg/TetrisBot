@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "general_functions.h"
+#include "Robot.h"
 #include <sstream>
 
 SDL_Surface *load_image(std::string filename) {
@@ -44,8 +45,10 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination, 
     SDL_BlitSurface(source, clip, destination, &offset);
 }
 
-bool applyHomeScreen(SDL_Surface *screen) {
-
+bool applyHomeScreen(SDL_Surface *screen, SDL_Surface *background, std::string robotDevicePath) {
+    
+    
+    
     TTF_Init();
 
     //The font that's going to be used
@@ -61,20 +64,31 @@ bool applyHomeScreen(SDL_Surface *screen) {
     //The color of the font
     SDL_Color textColor = {255, 255, 255};
 
+    apply_surface(0, 0, background, screen);
+    
+    int distance = 0;
     SDL_Surface *message = TTF_RenderText_Solid(fontTitle, "TetrisBot", textColor);
     apply_surface(0, 0, message, screen);
     SDL_FreeSurface(message);
     
-    message = TTF_RenderText_Solid(font, "Use left and right arrow to move the robot", textColor);
-    apply_surface(0, message->h * 3, message, screen);
-    SDL_FreeSurface(message);
-
-    message = TTF_RenderText_Solid(font, "Use space to shoot", textColor);
-    apply_surface(0, message->h * 4, message, screen);
+    
+    distance += 3;    
+    std::stringstream ss;
+    ss << "Path to robot device: " << robotDevicePath;
+    std::cout << ss.str().c_str()  << std::endl;
+    
+    message = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
+    apply_surface(0, message->h * distance, message, screen);
     SDL_FreeSurface(message);
     
+    distance +=3;
+    message = TTF_RenderText_Solid(font, "left and right arrow to move the robot - space to shoot", textColor);
+    apply_surface(0, message->h * distance, message, screen);
+    SDL_FreeSurface(message);
+    
+    distance += 3;    
     message = TTF_RenderText_Solid(font, "press space to continue", textColor);
-    apply_surface(0, message->h * 7, message, screen);
+    apply_surface(0, message->h * distance, message, screen);
     SDL_FreeSurface(message);
 
     TTF_CloseFont(fontTitle);
@@ -106,17 +120,15 @@ bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surf
     apply_surface((SCREEN_PLAYABLE_WIDTH + 10), (message->h), message, screen);
     SDL_FreeSurface(message);
     message = NULL;
-    using namespace std;
     
-    using namespace std;
-    stringstream ss;
+    
+    std::stringstream ss;
     ss << SCORE;
     message = TTF_RenderText_Solid(font, ss.str().c_str(), textColor);
     if (message == NULL)
         return false;
     apply_surface((SCREEN_PLAYABLE_WIDTH + 10), (message->h * 2), message, screen);
     SDL_FreeSurface(message);
-    
     
     TTF_CloseFont(font);
     TTF_Quit();
@@ -153,9 +165,17 @@ bool applyGameOverScreen(SDL_Surface *screen) {
     return true;
 }
 
-void handleHomeScreen(SDL_Event event, bool & homeScreen) {
+void handleHomeScreen(SDL_Event event, bool & homeScreen, std::string & robotDevicePath) {
+    
     if (homeScreen)
         if (event.type == SDL_KEYDOWN)
-            if (event.key.keysym.sym == SDLK_SPACE)
+            if (event.key.keysym.sym == SDLK_SPACE){
                 homeScreen = false;
+            }else if (event.key.keysym.sym == SDLK_BACKSPACE){
+                if(robotDevicePath.size()>0){
+                robotDevicePath = robotDevicePath.erase(robotDevicePath.size()-1);
+                }
+            }else{
+                robotDevicePath += (char)event.key.keysym.unicode; 
+            }
 }

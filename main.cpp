@@ -138,6 +138,9 @@ int shot_vely = -8;
 // filename of the shot surface
 const std::string SHOT_SURFACE_FILE = "shot.png";
 
+// the path to the robot device
+std::string robotDevicePath = "dev/dev0";
+
 //the event handler
 SDL_Event event;
 
@@ -176,19 +179,22 @@ int init() {
     if (shot_surface == NULL)
         return 1;
 
+    SDL_EnableUNICODE(SDL_ENABLE);
+
     return 0;
 }
 
 // frees the memory
 
 void clean() {
+    SDL_EnableUNICODE(SDL_DISABLE);
+
     for (int i = 0; i < sizeof ( SQUARE_COLORS_FILES) / sizeof ( SQUARE_COLORS_FILES[ 0 ]); i++)
         SDL_FreeSurface(squares_surfaces[i]);
     SDL_FreeSurface(background);
     SDL_FreeSurface(divider_bar);
     SDL_FreeSurface(robot_surface);
     SDL_FreeSurface(shot_surface);
-    SDL_FreeSurface(screen);
     SDL_Quit();
 }
 
@@ -316,13 +322,12 @@ int main(int argc, char* args[]) {
     // if alter this declaration, update it at handlePlayAgain function
     ShotsOnTheWorld shotsOnTetrisBot(SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
 
-    if (homeScreen)
-        applyHomeScreen(screen);
-
     // starts the clock "delta" and counter "frame" to cap the frames per second
     Timer delta;
     delta.start();
     long double frame = 0;
+
+    applyHomeScreen(screen, background, robotDevicePath);
 
     //While the user hasn't quit
     while (quit == false) {
@@ -332,8 +337,16 @@ int main(int argc, char* args[]) {
 
             //if is at homeScreen
             if (homeScreen) {
-                //verify if space was pressed
-                handleHomeScreen(event, homeScreen);
+
+                // handles the home screen window event
+                handleHomeScreen(event, homeScreen, robotDevicePath);
+                
+                // this is to update the window. It is necessary now because the  user types the robot path device
+                applyHomeScreen(screen, background, robotDevicePath);
+
+                if (SDL_Flip(screen) == -1) {
+                    return 1;
+                }
 
                 // if is not at gameOver == is at game playing mode
             } else if (!gameOver) {
