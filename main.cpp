@@ -11,14 +11,12 @@
 //      but if the robot file imports shot, how can the shot refer to the robot too
 //      what would be the good approach here?
 
-
-// finish the createRandomPiece function
 // verify leak situations
 // get continuous key pressing to move the robot
 // fix bug on side collision between the piece and robot
-// menu for choosing the correct port to connect with the robot
 // the next piece display
 // the score thing
+// implement the rotate
 
 
 //The headers
@@ -201,65 +199,56 @@ void clean() {
 // returns a random random piece
 
 Piece createRandomPiece() {
-    int type = rand() % 2;
+    int type = rand() % 4;
     int color = rand() % 5;
 
     int randomLeftMargin = 0;
     int piece_width = 0;
     Piece myPiece;
 
-    int firstPieceWidth = 48 + SQUARE_WIDTH;
-    int firstPiece[] = {
-        0, 0,
-        16, 0,
-        32, 48,
-        48, 16
-    };
-
-    int secondPieceWidth = 48 + SQUARE_WIDTH;
-    int secondPiece[] = {
-        0, 0,
-        16, 0,
-        32, 0,
-        48, 0,
-        48, 16
-    };
-
-    int thirdPieceWidth = 16 + SQUARE_WIDTH;
-    int thirdPiece[] = {
-        0, 0,
-        0, 16,
-        0, 32,
-        0, 48,
-        16, 48
-    };
-
-    int fourthPieceWidth = 32 + SQUARE_WIDTH;
-    int fourfhPiece[] = {
-        0, 0,
-        0, 16,
-        16, 16,
-        0, 32,
-        0, 48
-    };
-
-    piece_width = (48 + 16);
+    switch (type) {
+        case 0:
+            piece_width = 48 + SQUARE_WIDTH;
+            randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
+            myPiece.addSquare(Square(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(16 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(32 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(48 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(48 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            break;
+        case 1:
+            piece_width = 48 + SQUARE_WIDTH;
+            randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
+            myPiece.addSquare(Square(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(16 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(32 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(32 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(48 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            break;
+        case 2:
+            piece_width = 16 + SQUARE_WIDTH;
+            randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
+            myPiece.addSquare(Square(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(00 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(00 + randomLeftMargin, 32, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(00 + randomLeftMargin, 48, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(16 + randomLeftMargin, 48, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            break;
+        case 3:
+            piece_width = 32 + SQUARE_WIDTH;
+            randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
+            myPiece.addSquare(Square(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(00 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(16 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(00 + randomLeftMargin, 32, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            myPiece.addSquare(Square(00 + randomLeftMargin, 48, color, SQUARE_WIDTH, SQUARE_HEIGHT));
+            break;
+    }
 
     // seed the rand function
     srand(clock());
 
-    // %16 *16 cast the result to be a multiple of 16.
-    randomLeftMargin = ((rand() % (SCREEN_PLAYABLE_WIDTH - piece_width)) % 16) * 16;
-    Square mySquare(0 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
-    Square mySquare1(16 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
-    Square mySquare2(32 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
-    Square mySquare3(48 + randomLeftMargin, 0, color, SQUARE_WIDTH, SQUARE_HEIGHT);
-    Square mySquare4(48 + randomLeftMargin, 16, color, SQUARE_WIDTH, SQUARE_HEIGHT);
-    myPiece.addSquare(mySquare);
-    myPiece.addSquare(mySquare1);
-    myPiece.addSquare(mySquare2);
-    myPiece.addSquare(mySquare3);
-    myPiece.addSquare(mySquare4);
+    
     return myPiece;
 }
 
@@ -340,7 +329,7 @@ int main(int argc, char* args[]) {
 
                 // handles the home screen window event
                 handleHomeScreen(event, homeScreen, robotDevicePath);
-                
+
                 // this is to update the window. It is necessary now because the  user types the robot path device
                 applyHomeScreen(screen, background, robotDevicePath);
 
