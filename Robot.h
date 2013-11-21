@@ -21,7 +21,7 @@ private:
     SDL_Rect box;
     
     // the amount of shots that the robot have
-    int amoutOfShots;
+    int amountOfShots;
     
     // the score the robot accumulated
     int score;
@@ -50,6 +50,12 @@ public:
             const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT, 
             int shot_width, int shot_height, int shot_velx, int shot_vely, SDL_Surface *shot_surface);
 
+    // set the x position of the robot
+    void setX(int x);
+    
+    // set the amount of shots
+    void setAmountOfShots(const int ROBOT_START_AMOUNT_OF_SHOTS);
+
     // the moves the robot only on axis x
     void move(int x, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece);
 
@@ -71,9 +77,11 @@ public:
     // handles events [ if the user pressed left or right ] ]
     void handleEvents(SDL_Event event ,int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld);
     
+    // gets the score
     int getScore();
     
-    void scored();
+    // set the score
+    void setScore(int score);
     
 };
 

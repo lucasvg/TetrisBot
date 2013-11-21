@@ -13,9 +13,9 @@
 Robot::Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, int robot_gun_position,
         const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT,
         int shot_width, int shot_height, int shot_velx, int shot_vely, SDL_Surface *shot_surface)
-        : ROBOT_GUN_POSITION(robot_gun_position) {
+: ROBOT_GUN_POSITION(robot_gun_position) {
 
-    box.x = (SCREEN_PLAYABLE_WIDTH - ROBOT_WIDTH) / 2;
+    setX((SCREEN_PLAYABLE_WIDTH - ROBOT_WIDTH) / 2);
     box.y = SCREEN_HEIGHT - ROBOT_HEIGHT;
     box.w = ROBOT_WIDTH;
     box.h = ROBOT_HEIGHT;
@@ -28,8 +28,16 @@ Robot::Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_STAR
     this->shot_surface = shot_surface;
 
     score = 0;
-    amoutOfShots = ROBOT_START_AMOUNT_OF_SHOTS;
+    setAmountOfShots(ROBOT_START_AMOUNT_OF_SHOTS);
     surface = robot_surface;
+};
+
+void Robot::setX(int x) {
+    box.x = x;
+};
+
+void Robot::setAmountOfShots(const int ROBOT_START_AMOUNT_OF_SHOTS){
+    amountOfShots = ROBOT_START_AMOUNT_OF_SHOTS;
 };
 
 void Robot::move(int x, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece) {
@@ -102,10 +110,10 @@ void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainP
 
 }
 
-int Robot::getScore(){
+int Robot::getScore() {
     return score;
 }
 
-void Robot::scored(){
-    score++;
+void Robot::setScore(int score){
+    this->score = score;
 }

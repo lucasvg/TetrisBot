@@ -139,6 +139,14 @@ bool applyGameOverScreen(SDL_Surface *screen) {
     SDL_Surface *message = TTF_RenderText_Solid(font, "GameOver!!! MUHAHAHAHA", textColor);
     apply_surface(0, 0, message, screen, NULL);
     SDL_FreeSurface(message);
+    
+    message = TTF_RenderText_Solid(font, "Wanna play again?", textColor);
+    apply_surface(0, message->h *2, message, screen, NULL);
+    SDL_FreeSurface(message);
+    
+    message = TTF_RenderText_Solid(font, "(Y/N)", textColor);
+    apply_surface(0, message->h *3, message, screen, NULL);
+    SDL_FreeSurface(message);
 
     TTF_CloseFont(font);
     TTF_Quit();

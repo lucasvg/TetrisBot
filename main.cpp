@@ -6,7 +6,7 @@
 // DEFINITIONS
 
 // already need to do
-//      How can I make the connection between the robot and the shot?
+//      How can I make the connection between the robot and the shot? - forward declaration
 //      Shot should have a reference to the robot who shot it
 //      but if the robot file imports shot, how can the shot refer to the robot too
 //      what would be the good approach here?
@@ -16,6 +16,10 @@
 // verify leak situations
 // get continuous key pressing to move the robot
 // fix bug on side collision between the piece and robot
+// menu for choosing the correct port to connect with the robot
+// the next piece display
+// the score thing
+
 
 //The headers
 #include "SDL/SDL.h"
@@ -123,7 +127,7 @@ SDL_Surface *shot_surface = NULL;
 int shot_width = 16;
 
 // the height of the shot
-int shot_height = 16; 
+int shot_height = 16;
 
 // the shot horizontal velocity of the shot
 int shot_velx = 0;
@@ -269,6 +273,28 @@ bool isGameOver(Robot robot, Piece piece, Piece mainPiece, const int SCREEN_HEIG
     return false;
 }
 
+void handlePlayAgain(SDL_Event event, Robot & myRobot, ShotsOnTheWorld & ShotsOnTheWorld, bool & gameOver, bool & quit, Piece & mainPiece, Piece & dropPiece,
+        const int SCREEN_PLAYABLE_WIDTH, const int ROBOT_WIDTH, const int ROBOT_START_AMOUNT_OF_SHOTS) {
+
+    if (event.type == SDL_KEYDOWN)
+        if (event.key.keysym.sym == SDLK_n) {
+            quit = true;
+        } else if (event.key.keysym.sym == SDLK_y) {
+            myRobot.setX((SCREEN_PLAYABLE_WIDTH - ROBOT_WIDTH) / 2);
+            myRobot.setAmountOfShots(ROBOT_START_AMOUNT_OF_SHOTS);
+
+            ShotsOnTheWorld.clean();
+
+            gameOver = false;
+
+            dropPiece.clean();
+            mainPiece.clean();
+            dropPiece = createRandomPiece();
+
+            myRobot.setScore(0);
+        }
+}
+
 int main(int argc, char* args[]) {
 
     if (init() == 1)
@@ -282,12 +308,14 @@ int main(int argc, char* args[]) {
     Piece mainPiece;
 
     // instance of the robot - the player
-    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, robot_gun_position, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH, 
+    // if alter this declaration, update it at handlePlayAgain function
+    Robot myRobot(ROBOT_WIDTH, ROBOT_HEIGHT, ROBOT_START_AMOUNT_OF_SHOTS, robot_gun_position, ROBOT_SPEED, robot_surface, SCREEN_PLAYABLE_WIDTH,
             SCREEN_HEIGHT, shot_width, shot_height, shot_velx, shot_vely, shot_surface);
-    
+
     // this handles the shots on the screen
+    // if alter this declaration, update it at handlePlayAgain function
     ShotsOnTheWorld shotsOnTetrisBot(SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
-   
+
     if (homeScreen)
         applyHomeScreen(screen);
 
@@ -295,7 +323,7 @@ int main(int argc, char* args[]) {
     Timer delta;
     delta.start();
     long double frame = 0;
-    
+
     //While the user hasn't quit
     while (quit == false) {
 
@@ -312,6 +340,8 @@ int main(int argc, char* args[]) {
                 myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece, shotsOnTetrisBot);
             } else {
                 //game over
+                handlePlayAgain(event, myRobot, shotsOnTetrisBot, gameOver, quit, mainPiece, dropPiece, SCREEN_PLAYABLE_WIDTH,
+                        ROBOT_WIDTH, ROBOT_START_AMOUNT_OF_SHOTS);
             }
 
             //If the user has quitted the window
@@ -331,22 +361,22 @@ int main(int argc, char* args[]) {
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
         shotsOnTetrisBot.moveShots(dropPiece, mainPiece);
-        
+
         // if the dropPiece was completely destroyed
-        if(dropPiece.size() == 0)
+        if (dropPiece.size() == 0)
             dropPiece = createRandomPiece();
-        
+
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
-        
+
         if (gameOver)
             applyGameOverScreen(screen);
-       
+
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
 
         shotsOnTetrisBot.show(screen);
-        
+
         myRobot.show(screen);
 
         if (dropPiece.isColliding(SCREEN_HEIGHT) or dropPiece.isColliding(mainPiece)) {
@@ -359,7 +389,7 @@ int main(int argc, char* args[]) {
             return 1;
         }
 
-        
+
         // this is to cap the frame rate at FRAMES_PER_SECOND limit
         frame++;
         if ((delta.get_ticks() < 1000 / FRAMES_PER_SECOND)) {

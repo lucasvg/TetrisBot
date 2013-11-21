@@ -19,15 +19,23 @@ void ShotsOnTheWorld::newShot(Shot shot) {
 void ShotsOnTheWorld::moveShots(Piece & piece, Piece & mainPiece) {
     for (int i = 0; i < shotsAlive.size(); i++) {
         shotsAlive[i].move(piece, mainPiece, WORLD_HEIGHT);
-        if(shotsAlive[i].gety()<0)
-            shotsAlive.erase(shotsAlive.begin()+i);
+        if (shotsAlive[i].gety() < 0)
+            shotsAlive.erase(shotsAlive.begin() + i);
     }
 }
 
-void ShotsOnTheWorld::show(SDL_Surface *screen){
+void ShotsOnTheWorld::show(SDL_Surface *screen) {
     for (int i = 0; i < shotsAlive.size(); i++) {
         shotsAlive[i].show(screen);
     }
 }
 
-bool isCollided(Square);
+int ShotsOnTheWorld::size() {
+    return shotsAlive.size();
+}
+
+void ShotsOnTheWorld::clean() {
+    for(int i = 0; i<size(); i++){
+        shotsAlive.erase(shotsAlive.begin() + i);
+    }
+}

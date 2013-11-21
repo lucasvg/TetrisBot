@@ -32,14 +32,12 @@ public:
     
     // it shows the shots on "screen"
     void show(SDL_Surface *screen);
-
-    // it verifies if any shot is collided with any square of piece or mainPiece
-    bool isCollided(Square);
     
     // returns the amount of shots
-    int size(){
-        return shotsAlive.size();
-    }
+    int size();
+    
+    // deletes all the shots
+    void clean();
 };
 
 #endif	/* SHOTSONTHEWORLD_H */

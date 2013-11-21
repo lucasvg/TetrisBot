@@ -46,6 +46,8 @@ public:
     // returns the square of index i
     Square operator[](int i);
 
+    // deletes all the squares
+    void clean();
 };
 
 #endif	/* PIECE_H */

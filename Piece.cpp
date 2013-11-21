@@ -65,3 +65,9 @@ Square Piece::operator[](int i) {
     return mySquares[i];
 }
 
+void Piece::clean(){
+    int amoutOfSquares = size();
+    for(int i = 0; i<amoutOfSquares; i++){ 
+        mySquares.erase(mySquares.begin() + i);
+    }
+}
