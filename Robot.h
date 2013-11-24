@@ -6,6 +6,7 @@
  */
 
 #include <SDL/SDL.h>
+#include "Timer.h"
 #include "Piece.h"
 #include "general_functions.h"
 #include "Shot.h"

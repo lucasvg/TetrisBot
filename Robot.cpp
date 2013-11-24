@@ -101,7 +101,6 @@ void Robot::show(SDL_Surface *screen) {
 
 void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld,
         Timer & delta_robot, const int ROBOT_SHOOT_DELAY, const int ROBOT_MOVE_DELAY) {
-    std::cout << delta_robot.get_ticks() << std::endl;
 
     Uint8 *keystates = SDL_GetKeyState(NULL);
 
