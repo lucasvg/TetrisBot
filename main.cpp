@@ -2,8 +2,10 @@
 
 //////////////////////////////////////////////
 ///////////// IMPORTANT !!! //////////////////
-//////////////////////////////////////////////
-// DEFINITIONS
+//////////////////////////////////////////////// DEFINITIONS
+
+
+// remake the collision of the shot with the square
 
 // already need to do
 //      How can I make the connection between the robot and the shot? - forward declaration
@@ -116,7 +118,11 @@ const int ROBOT_START_AMOUNT_OF_SHOTS = 40;
 int robot_gun_position = 16;
 
 // the velocity of the robot moves [left || right]], in pixels  // shouldn't be const
-const int ROBOT_SPEED = 16;
+const int ROBOT_SPEED = 4;
+
+// the time (in milliseconds) of the delay of each movement
+const int ROBOT__SHOOT_DELAY = 300;
+const int ROBOT__MOVE_DELAY = 50;
 
 // stores the shot surface
 SDL_Surface *shot_surface = NULL;
@@ -311,6 +317,10 @@ int main(int argc, char* args[]) {
     // if alter this declaration, update it at handlePlayAgain function
     ShotsOnTheWorld shotsOnTetrisBot(SCREEN_PLAYABLE_WIDTH, SCREEN_HEIGHT);
 
+    // handler of the robot_delay
+    Timer delta_robot;
+    delta_robot.start();
+    
     // starts the clock "delta" and counter "frame" to cap the frames per second
     Timer delta;
     delta.start();
@@ -338,9 +348,7 @@ int main(int argc, char* args[]) {
                 }
 
                 // if is not at gameOver == is at game playing mode
-            } else if (!gameOver) {
-                myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece, shotsOnTetrisBot);
-            } else {
+            } else if (gameOver) {
                 //game over
                 handlePlayAgain(event, myRobot, shotsOnTetrisBot, gameOver, quit, mainPiece, dropPiece, SCREEN_PLAYABLE_WIDTH,
                         ROBOT_WIDTH, ROBOT_START_AMOUNT_OF_SHOTS);
@@ -352,10 +360,14 @@ int main(int argc, char* args[]) {
                 quit = true;
             }
         }
-
+        
         // only pass of this part if is during the game
         if ((homeScreen) or (gameOver)) {
             continue;
+        }
+        
+        if (!homeScreen and !gameOver ){
+            myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece, shotsOnTetrisBot, delta_robot, ROBOT__SHOOT_DELAY, ROBOT__MOVE_DELAY);
         }
 
         applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH, myRobot.getScore());

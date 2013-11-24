@@ -6,9 +6,10 @@
  */
 
 #include <iostream>
-
+#include "Timer.h"
 #include "Robot.h"
 #include "ShotsOnTheWorld.h"
+#include "Timer.h"
 
 Robot::Robot(const int ROBOT_WIDTH, const int ROBOT_HEIGHT, const int ROBOT_START_AMOUNT_OF_SHOTS, int robot_gun_position,
         const int ROBOT_SPEED, SDL_Surface *robot_surface, const int SCREEN_PLAYABLE_WIDTH, const int SCREEN_HEIGHT,
@@ -36,7 +37,7 @@ void Robot::setX(int x) {
     box.x = x;
 };
 
-void Robot::setAmountOfShots(const int ROBOT_START_AMOUNT_OF_SHOTS){
+void Robot::setAmountOfShots(const int ROBOT_START_AMOUNT_OF_SHOTS) {
     amountOfShots = ROBOT_START_AMOUNT_OF_SHOTS;
 };
 
@@ -98,22 +99,33 @@ void Robot::show(SDL_Surface *screen) {
     apply_surface(box.x, box.y, surface, screen);
 };
 
-void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld) {
-    if (event.type == SDL_KEYDOWN)
-        if (event.key.keysym.sym == SDLK_LEFT)
-            move(speed * (-1), SCREEN_PLAYABLE_WIDTH, mainPiece);
-        else if (event.key.keysym.sym == SDLK_RIGHT)
-            move(speed, SCREEN_PLAYABLE_WIDTH, mainPiece);
-        else if (event.key.keysym.sym == SDLK_SPACE)
-            // shoot
-            shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface));
+void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld,
+        Timer & delta_robot, const int ROBOT_SHOOT_DELAY, const int ROBOT_MOVE_DELAY) {
+    std::cout << delta_robot.get_ticks() << std::endl;
 
+    Uint8 *keystates = SDL_GetKeyState(NULL);
+
+    if (delta_robot.get_ticks() > ROBOT_MOVE_DELAY) {
+        if (keystates[ SDLK_LEFT ])
+            move(speed * (-1), SCREEN_PLAYABLE_WIDTH, mainPiece);
+        if (keystates[ SDLK_RIGHT ])
+            move(speed, SCREEN_PLAYABLE_WIDTH, mainPiece);
+    }
+
+    if (delta_robot.get_ticks() > ROBOT_SHOOT_DELAY) {
+        if (keystates[ SDLK_SPACE ])
+            shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface));
+    }
+    
+    if ((delta_robot.get_ticks() > ROBOT_MOVE_DELAY) and (delta_robot.get_ticks() > ROBOT_SHOOT_DELAY) )
+        delta_robot.start();
+    
 }
 
 int Robot::getScore() {
     return score;
 }
 
-void Robot::setScore(int score){
+void Robot::setScore(int score) {
     this->score = score;
 }

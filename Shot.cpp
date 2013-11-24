@@ -22,7 +22,7 @@ Shot::Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface)
 void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
 
     for (int i = 0; i < piece.size(); i++) {
-        if (isCollided(piece[i])) {
+        if (willCollid(piece[i], velx, vely)) {
             this->box.y = -1;
             piece.deleteSquare(i);
             return;
@@ -30,7 +30,7 @@ void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
     }
 
     for (int i = 0; i < mainPiece.size(); i++) {
-        if (isCollided(mainPiece[i])) {
+        if (willCollid(mainPiece[i], velx, vely)) {
             this->box.y = -1;
             mainPiece.deleteSquare(i);
             return;
@@ -48,9 +48,10 @@ void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
 
 }
 
-bool Shot::isCollided(Square square) {
-    if (box.x == square.getx())
-        if ((box.y <= square.gety()) and (box.y + box.h >= square.gety()))
+bool Shot::willCollid(Square square, int x, int y) {
+    if ((box.x + x == square.getx()) or ((box.x + x > square.getx()) and (box.x + x < (square.getx() + square.getw())))
+            or ((square.getx() > box.x + x) and (square.getx() < (box.x + x + box.w))))
+        if ((box.y + y <= square.gety()) and (box.y + y + box.h >= square.gety()))
             return true;
     return false;
 };

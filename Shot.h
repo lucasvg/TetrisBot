@@ -31,8 +31,8 @@ public:
     // moves the shot on the screen (verifies if it is collided with the piece, mainPiece or the Screen_height)
     void move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT);
 
-    // if is collided with "square"
-    bool isCollided(Square square);
+    // if the shot will collid with square after moving ("x", "y")
+    bool willCollid(Square square, int x, int y);
 
     // shows the shot on the screen
     void show(SDL_Surface *screen);

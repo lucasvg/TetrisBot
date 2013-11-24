@@ -75,7 +75,8 @@ public:
     void show(SDL_Surface *screen);
 
     // handles events [ if the user pressed left or right ] ]
-    void handleEvents(SDL_Event event ,int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld);
+    void handleEvents(SDL_Event event ,int SCREEN_PLAYABLE_WIDTH, Piece mainPiece, ShotsOnTheWorld & shotsOnTheWorld, 
+        Timer & delta_robot, const int ROBOT_SHOOT_DELAY, const int ROBOT_MOVE_DELAY);
     
     // gets the score
     int getScore();
