@@ -12,6 +12,8 @@
 #ifndef SHOT_H
 #define	SHOT_H
 
+class Robot;
+
 // this is a unique shot
 class Shot {
 private:
@@ -24,9 +26,12 @@ private:
     // the surface of the shot
     SDL_Surface *surface;
 
+    // a reference to who shoot this shot
+    Robot * whoShoot;
+    
 public:
     // constructor
-    Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface);
+    Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface, Robot *whoShoot);
 
     // moves the shot on the screen (verifies if it is collided with the piece, mainPiece or the Screen_height)
     void move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT);

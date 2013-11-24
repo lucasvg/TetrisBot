@@ -31,5 +31,7 @@ bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surf
 // determines if the homeScreen should be shown
 void handleHomeScreen(SDL_Event event, bool & homeScreem, std::string & robotDevicePath);
 
+void applyNextPeaceStatus();
+
 #endif	/* GENERAL_FUNCTIONS_H */
 

@@ -8,8 +8,9 @@
 #include <iostream>
 
 #include "Shot.h"
+#include "Robot.h"
 
-Shot::Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface) {
+Shot::Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface, Robot *whoShoot) {
     this->box.x = x;
     this->box.y = y;
     this->box.w = w;
@@ -17,6 +18,7 @@ Shot::Shot(int x, int y, int w, int h, int velx, int vely, SDL_Surface* surface)
     this->velx = velx;
     this->vely = vely;
     this->surface = surface;
+    this->whoShoot = whoShoot;
 };
 
 void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
@@ -24,6 +26,7 @@ void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
     for (int i = 0; i < piece.size(); i++) {
         if (willCollid(piece[i], velx, vely)) {
             this->box.y = -1;
+            this->whoShoot->setScore(this->whoShoot->getScore() +1 );
             piece.deleteSquare(i);
             return;
         }
@@ -32,6 +35,7 @@ void Shot::move(Piece & piece, Piece & mainPiece, const int SCREEN_HEIGHT) {
     for (int i = 0; i < mainPiece.size(); i++) {
         if (willCollid(mainPiece[i], velx, vely)) {
             this->box.y = -1;
+            this->whoShoot->setScore(this->whoShoot->getScore() +1 );
             mainPiece.deleteSquare(i);
             return;
         }

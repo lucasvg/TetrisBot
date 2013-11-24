@@ -113,7 +113,7 @@ void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainP
 
     if (delta_robot.get_ticks() > ROBOT_SHOOT_DELAY) {
         if (keystates[ SDLK_SPACE ])
-            shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface));
+            shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface, this));
     }
     
     if ((delta_robot.get_ticks() > ROBOT_MOVE_DELAY) and (delta_robot.get_ticks() > ROBOT_SHOOT_DELAY) )
