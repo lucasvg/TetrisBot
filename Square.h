@@ -51,6 +51,7 @@ public:
     //Shows the square on the screen
     void show(SDL_Surface *squares_surfaces[], SDL_Surface *screen);
 
+    int getSquareColor();
 };
 
 #endif	/* SQUARE_H */

@@ -97,7 +97,7 @@ bool applyHomeScreen(SDL_Surface *screen, SDL_Surface *background, std::string r
 }
 
 bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH, 
-        const int SCORE) {
+        const int SCREEN_WIDTH, const int SCORE, Piece nextPiece, SDL_Surface *squares_surfaces[]) {
     
     apply_surface(0, 0, background, screen);
 
@@ -128,6 +128,24 @@ bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surf
         return false;
     apply_surface((SCREEN_PLAYABLE_WIDTH + 10), (message->h * 2), message, screen);
     SDL_FreeSurface(message);
+    message = NULL;
+    
+    message = TTF_RenderText_Solid(font, "Next Piece:", textColor);
+    if (message == NULL)
+        return false;
+    apply_surface((SCREEN_PLAYABLE_WIDTH + 10), (message->h*6), message, screen);
+    
+    Square firstSquare = nextPiece[0];
+    for(int i = 0; i<nextPiece.size(); i++){
+        apply_surface((SCREEN_PLAYABLE_WIDTH + (SCREEN_WIDTH - SCREEN_PLAYABLE_WIDTH - nextPiece.getPieceWidth() - 80)/2 + nextPiece[i].getx() - firstSquare.getx()), 
+                (message->h*8 + nextPiece[i].gety() - firstSquare.gety()),
+                squares_surfaces[nextPiece[i].getSquareColor()],
+                screen);
+    }
+    //nextPiece.show(squares_surfaces, screen);
+    
+    SDL_FreeSurface(message);
+    message = NULL;    
     
     TTF_CloseFont(font);
     TTF_Quit();

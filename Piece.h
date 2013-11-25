@@ -48,6 +48,8 @@ public:
 
     // deletes all the squares
     void clean();
+    
+    int getPieceWidth();
 };
 
 #endif	/* PIECE_H */

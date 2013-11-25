@@ -67,10 +67,10 @@ public:
     bool isCollidingRight(Square square);
 
     // if the top of the robot is colliding with the piece
-    bool isCollidingTop(Piece piece);
+    bool isColliding(Piece piece);
 
     // if the top of the robot is colliding with the square
-    bool isCollidingTop(Square square);
+    bool isColliding(Square square);
 
     // prints the robot image on screen
     void show(SDL_Surface *screen);

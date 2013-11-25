@@ -71,3 +71,18 @@ void Piece::clean(){
         mySquares.erase(mySquares.begin() + i);
     }
 }
+
+int Piece::getPieceWidth(){
+    if(size()==0)
+        return 0;
+    int firstX, lastX;
+    firstX = mySquares[0].getx();
+    lastX = mySquares[0].getx() + mySquares[0].getw();
+    for(int i=1; i<size(); i++){
+        if(firstX < mySquares[i].getx())
+            firstX = mySquares[i].getx();
+        if(lastX < mySquares[i].getx() + mySquares[i].getw())
+            firstX = mySquares[i].getx() + mySquares[i].getw();
+    }
+    return lastX - firstX;
+}

@@ -58,8 +58,12 @@
 
     int Square::geth() {
         return box.h;
-    }
+    }    
 
     void Square::show(SDL_Surface *squares_surfaces[], SDL_Surface *screen) {
         apply_surface(box.x, box.y, squares_surfaces[square_color], screen);
+    }
+
+    int Square::getSquareColor(){
+        return square_color;
     }

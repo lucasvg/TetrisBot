@@ -79,19 +79,25 @@ bool Robot::isCollidingRight(Square square) {
     return false;
 }
 
-bool Robot::isCollidingTop(Piece piece) {
+bool Robot::isColliding(Piece piece) {
     for (int i = 0; i < piece.size(); i++)
-        if (isCollidingTop(piece[i]))
+        if (isColliding(piece[i]))
             return true;
 
     return false;
 }
 
-bool Robot::isCollidingTop(Square square) {
-    if ((square.getx() >= box.x) and square.getx() < box.x + box.w)
+bool Robot::isColliding(Square square) {
+    if ((square.getx() >= box.x) and square.getx() <= box.x + box.w)
         if (square.gety() + square.geth() >= box.y)
             return true;
 
+    if (square.gety() + square.geth() >= box.y)
+        if (((square.getx() > box.x) and (square.getx() < box.x + box.w) ) or 
+                ((square.getx() + square.getw() > box.x) and (square.getx() + square.getw() < box.x + box.w )))
+            return true;
+            
+    
     return false;
 }
 

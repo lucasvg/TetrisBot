@@ -90,7 +90,7 @@ const int SQUARE_WIDTH = 16;
 const int SQUARE_HEIGHT = 16;
 
 // the velocity of the square falls - in pixels   // shouldn't be const
-const int SQUARE_SPEED = 2;
+const int SQUARE_SPEED = 3;
 
 // the files names of the squares surfaces
 const std::string SQUARE_COLORS_FILES[] = {"square_gray.png", "square_pink.png",
@@ -262,7 +262,7 @@ Piece createRandomPiece() {
 
 bool isGameOver(Robot robot, Piece piece, Piece mainPiece, const int SCREEN_HEIGHT) {
 
-    if (robot.isCollidingTop(piece) and !(piece.isColliding(mainPiece)))
+    if (robot.isColliding(piece) and !(piece.isColliding(mainPiece)))
         return true;
 
     //if mainPiece has the SCREEN_HEIGHT
@@ -303,7 +303,9 @@ int main(int argc, char* args[]) {
 
     // dropPiece is the piece that is falling down
     Piece dropPiece;
+    Piece nextDropPiece;
     dropPiece = createRandomPiece();
+    nextDropPiece = createRandomPiece();
 
     // the mainPiece is compounded by the dropPieces that already fell
     Piece mainPiece;
@@ -342,7 +344,7 @@ int main(int argc, char* args[]) {
 
                 // this is to update the window. It is necessary now because the  user types the robot path device
                 applyHomeScreen(screen, background, robotDevicePath);
-
+                
                 if (SDL_Flip(screen) == -1) {
                     return 1;
                 }
@@ -370,21 +372,25 @@ int main(int argc, char* args[]) {
             myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece, shotsOnTetrisBot, delta_robot, ROBOT__SHOOT_DELAY, ROBOT__MOVE_DELAY);
         }
 
-        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH, myRobot.getScore());
+        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH, SCREEN_WIDTH,myRobot.getScore(), nextDropPiece, squares_surfaces);
 
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
         shotsOnTetrisBot.moveShots(dropPiece, mainPiece);
 
         // if the dropPiece was completely destroyed
-        if (dropPiece.size() == 0)
-            dropPiece = createRandomPiece();
-
+        if (dropPiece.size() == 0){
+            dropPiece = nextDropPiece;
+            nextDropPiece = createRandomPiece();
+        }
+        
+        
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
 
         if (gameOver)
             applyGameOverScreen(screen);
-
+            
+        
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
@@ -395,7 +401,8 @@ int main(int argc, char* args[]) {
 
         if (dropPiece.isColliding(SCREEN_HEIGHT) or dropPiece.isColliding(mainPiece)) {
             mainPiece.addPiece(dropPiece);
-            dropPiece = createRandomPiece();
+            dropPiece = nextDropPiece;
+            nextDropPiece = createRandomPiece();
         }
 
         //Update the screen

@@ -6,6 +6,7 @@
  */
 
 #include <string>
+#include "Piece.h"
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_image.h"
@@ -26,12 +27,13 @@ bool applyHomeScreen(SDL_Surface *screen, SDL_Surface *background, std::string r
 bool applyGameOverScreen(SDL_Surface *screen);
 
 // prints the game running screen on screen
-bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH, const int SCORE);
+bool applyGameScreen(SDL_Surface *background, SDL_Surface *divider_bar, SDL_Surface *screen, const int SCREEN_PLAYABLE_WIDTH, 
+        const int SCREEN_WIDTH, const int SCORE, Piece nextPiece, SDL_Surface *squares_surfaces[]);
 
 // determines if the homeScreen should be shown
 void handleHomeScreen(SDL_Event event, bool & homeScreem, std::string & robotDevicePath);
 
-void applyNextPeaceStatus();
+void applyNextPeaceStatus(Piece nextPiece);
 
 #endif	/* GENERAL_FUNCTIONS_H */
 
