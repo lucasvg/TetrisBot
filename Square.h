@@ -12,7 +12,9 @@
 #ifndef SQUARE_H
 #define	SQUARE_H
 
-// this is a square. It compounds the piece
+/*
+ *  this is a square. It compounds the piece
+*/
 class Square {
 private:
     //collision box;
@@ -24,7 +26,7 @@ private:
 
 public:
     //Initializes the variables
-
+   
     Square(int x, int y, int color, const int SQUARE_WIDTH, const int SQUARE_HEIGHT);
 
     //Moves the square, return true if it moved (was not collided)

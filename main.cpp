@@ -7,6 +7,8 @@
 
 // remake the collision of the shot with the square
 
+// creating a pause option
+
 // already need to do
 //      How can I make the connection between the robot and the shot? - forward declaration
 //      Shot should have a reference to the robot who shot it
@@ -121,7 +123,7 @@ int robot_gun_position = 16;
 const int ROBOT_SPEED = 4;
 
 // the time (in milliseconds) of the delay of each movement
-const int ROBOT__SHOOT_DELAY = 300;
+const int ROBOT__SHOOT_DELAY = 200;
 const int ROBOT__MOVE_DELAY = 50;
 
 // stores the shot surface
@@ -143,7 +145,7 @@ int shot_vely = -8;
 const std::string SHOT_SURFACE_FILE = "shot.png";
 
 // the path to the robot device
-std::string robotDevicePath = "dev/dev0";
+std::string robotDevicePath = "/dev/rfcomm0";
 
 //the event handler
 SDL_Event event;
@@ -176,6 +178,9 @@ int init() {
     }
 
     robot_surface = load_image(ROBOT_SURFACE_FILE);
+    
+    SDL_SetColorKey(robot_surface, SDL_SRCCOLORKEY, SDL_MapRGB(robot_surface->format, 255, 255, 255));
+    
     if (robot_surface == NULL)
         return 1;
 

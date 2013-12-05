@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=tetrisbot
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/tetrisbot
+CND_ARTIFACT_NAME_Debug=jogo
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/jogo
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=tetrisbot.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/tetrisbot.tar
+CND_PACKAGE_NAME_Debug=jogo.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/jogo.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=tetrisbot
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/tetrisbot
+CND_ARTIFACT_NAME_Release=jogo
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/jogo
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=tetrisbot.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/tetrisbot.tar
+CND_PACKAGE_NAME_Release=jogo.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/jogo.tar
 #
 # include compiler specific variables
 #
