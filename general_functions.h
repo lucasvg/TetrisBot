@@ -35,5 +35,9 @@ void handleHomeScreen(SDL_Event event, bool & homeScreem, std::string & robotDev
 
 void applyNextPeaceStatus(Piece nextPiece);
 
+std::string isCollidingTest();
+
+bool isColliding(SDL_Rect box1, SDL_Rect box2);
+
 #endif	/* GENERAL_FUNCTIONS_H */
 

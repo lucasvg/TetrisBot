@@ -196,3 +196,58 @@ void handleHomeScreen(SDL_Event event, bool & homeScreen, std::string & robotDev
                 robotDevicePath += (char)event.key.keysym.unicode; 
             }
 }
+
+std::string isCollidingTest(){
+    std::string error = "";
+    SDL_Rect box1, box2;
+    
+    box1.y = 1;
+    box1.h = 1;
+    box2.y = 5;
+    box2.h = 1;
+    
+    if(isColliding(box1, box2))
+        error += "error on IsColliding Test, nº1 \n";
+    
+    box1.h = 4;
+    if(!isColliding(box1, box2))
+        error += "error on IsColliding Test, nº2 \n";
+    
+    box1.y = 7;    
+    if(isColliding(box1, box2))
+        error += "error on IsColliding Test, nº3 \n";
+    
+    box2.y = 6;    
+    if(!isColliding(box1, box2))
+        error += "error on IsColliding Test, nº4 \n";    
+    
+    box1.x = 1;
+    box1.w = 2;
+    box1.y = 1;
+    box1.h = 3;
+    
+    box2.x = 4;
+    box2.w = 2;
+    box2.y = 1;
+    box2.h = 3;
+    
+    if(isColliding(box1, box2))
+        error += "error on IsColliding Test, nº5 \n";
+    
+    box1.x = 3;
+    if(!isColliding(box1, box2))
+        error += "error on IsColliding Test, nº6 \n";
+    
+    box1.x = 7;
+    if(isColliding(box1, box2))
+        error += "error on IsColliding Test, nº7 \n";
+    
+    box2.x = 5;
+    if(!isColliding(box1, box2))
+        error += "error on IsColliding Test, nº8 \n";
+    return error;
+}
+
+bool isColliding(SDL_Rect box1, SDL_Rect box2){
+    return !(((box1.y + box1.h) < box2.y) or (box1.y > (box2.y + box2.h)) or ((box1.x+box1.w) < box2.x) or (box1.x > (box2.x + box2.w)));
+}

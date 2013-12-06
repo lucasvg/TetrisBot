@@ -303,6 +303,8 @@ void handlePlayAgain(SDL_Event event, Robot & myRobot, ShotsOnTheWorld & ShotsOn
 
 int main(int argc, char* args[]) {
 
+    std::cout << isCollidingTest() << std::endl;
+    
     if (init() == 1)
         return 1;
 
