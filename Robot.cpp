@@ -42,18 +42,25 @@ void Robot::setAmountOfShots(const int ROBOT_START_AMOUNT_OF_SHOTS) {
 };
 
 void Robot::move(int x, int SCREEN_PLAYABLE_WIDTH, Piece mainPiece) {
+    if (x == 0)
+        return;
     // if the robot collides with the borders
-    if ((box.x + x < 0) or (box.x + x + box.w > SCREEN_PLAYABLE_WIDTH))
+    if ((box.x + x < 0) or ((box.x + x + box.w) > SCREEN_PLAYABLE_WIDTH))
         return;
 
     //if the robot collides with the mainPiece
     for (int i = 0; i < mainPiece.size(); i++)
         if (x > 0) {
-            if (isCollidingRight(mainPiece[i]))
-                return;
+            if (isCollidingRight(mainPiece[i])) {
+                if (mainPiece.moveHorizontal(x, SCREEN_PLAYABLE_WIDTH))
+                    return move(-(x-1), SCREEN_PLAYABLE_WIDTH, mainPiece);
+            }
+
         } else {
-            if (isCollidingLeft(mainPiece[i]))
-                return;
+            if (isCollidingLeft(mainPiece[i])) {
+                if (mainPiece.moveHorizontal(x, SCREEN_PLAYABLE_WIDTH))
+                        return move((x-1), SCREEN_PLAYABLE_WIDTH, mainPiece);
+            }
         }
 
     box.x += x;
@@ -93,11 +100,11 @@ bool Robot::isColliding(Square square) {
             return true;
 
     if (square.gety() + square.geth() >= box.y)
-        if (((square.getx() > box.x) and (square.getx() < box.x + box.w) ) or 
-                ((square.getx() + square.getw() > box.x) and (square.getx() + square.getw() < box.x + box.w )))
+        if (((square.getx() > box.x) and (square.getx() < box.x + box.w)) or
+                ((square.getx() + square.getw() > box.x) and (square.getx() + square.getw() < box.x + box.w)))
             return true;
-            
-    
+
+
     return false;
 }
 
@@ -121,10 +128,10 @@ void Robot::handleEvents(SDL_Event event, int SCREEN_PLAYABLE_WIDTH, Piece mainP
         if (keystates[ SDLK_SPACE ])
             shotsOnTheWorld.newShot(Shot(box.x + ROBOT_GUN_POSITION, box.y, shot_width, shot_height, shot_velx, shot_vely, shot_surface, this));
     }
-    
-    if ((delta_robot.get_ticks() > ROBOT_MOVE_DELAY) and (delta_robot.get_ticks() > ROBOT_SHOOT_DELAY) )
+
+    if ((delta_robot.get_ticks() > ROBOT_MOVE_DELAY) and (delta_robot.get_ticks() > ROBOT_SHOOT_DELAY))
         delta_robot.start();
-    
+
 }
 
 int Robot::getScore() {

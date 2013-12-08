@@ -28,6 +28,7 @@
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
 #include <vector>
+#include <sstream>
 #include "general_functions.h"
 #include "iostream"
 #include "Timer.h"
@@ -150,6 +151,8 @@ std::string robotDevicePath = "/dev/rfcomm0";
 //the event handler
 SDL_Event event;
 
+bool firstTime;
+
 // starts the SDL, loads all the files
 
 int init() {
@@ -178,9 +181,9 @@ int init() {
     }
 
     robot_surface = load_image(ROBOT_SURFACE_FILE);
-    
+
     SDL_SetColorKey(robot_surface, SDL_SRCCOLORKEY, SDL_MapRGB(robot_surface->format, 255, 255, 255));
-    
+
     if (robot_surface == NULL)
         return 1;
 
@@ -259,7 +262,7 @@ Piece createRandomPiece() {
     // seed the rand function
     srand(clock());
 
-    
+
     return myPiece;
 }
 
@@ -304,9 +307,11 @@ void handlePlayAgain(SDL_Event event, Robot & myRobot, ShotsOnTheWorld & ShotsOn
 int main(int argc, char* args[]) {
 
     std::cout << isCollidingTest() << std::endl;
-    
+
     if (init() == 1)
         return 1;
+
+    firstTime = true;
 
     // dropPiece is the piece that is falling down
     Piece dropPiece;
@@ -329,7 +334,7 @@ int main(int argc, char* args[]) {
     // handler of the robot_delay
     Timer delta_robot;
     delta_robot.start();
-    
+
     // starts the clock "delta" and counter "frame" to cap the frames per second
     Timer delta;
     delta.start();
@@ -351,7 +356,7 @@ int main(int argc, char* args[]) {
 
                 // this is to update the window. It is necessary now because the  user types the robot path device
                 applyHomeScreen(screen, background, robotDevicePath);
-                
+
                 if (SDL_Flip(screen) == -1) {
                     return 1;
                 }
@@ -369,35 +374,40 @@ int main(int argc, char* args[]) {
                 quit = true;
             }
         }
-        
+
         // only pass of this part if is during the game
         if ((homeScreen) or (gameOver)) {
             continue;
         }
-        
-        if (!homeScreen and !gameOver ){
+
+        if (firstTime == true) {
+            myRobot.startPhisicalRobot(robotDevicePath.c_str());
+            firstTime = false;
+        }
+
+        if (!homeScreen and !gameOver) {
             myRobot.handleEvents(event, SCREEN_PLAYABLE_WIDTH, mainPiece, shotsOnTetrisBot, delta_robot, ROBOT__SHOOT_DELAY, ROBOT__MOVE_DELAY);
         }
 
-        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH, SCREEN_WIDTH,myRobot.getScore(), nextDropPiece, squares_surfaces);
+        applyGameScreen(background, divider_bar, screen, SCREEN_PLAYABLE_WIDTH, SCREEN_WIDTH, myRobot.getScore(), nextDropPiece, squares_surfaces);
 
         dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
         shotsOnTetrisBot.moveShots(dropPiece, mainPiece);
 
         // if the dropPiece was completely destroyed
-        if (dropPiece.size() == 0){
+        if (dropPiece.size() == 0) {
             dropPiece = nextDropPiece;
             nextDropPiece = createRandomPiece();
         }
-        
-        
+
+
         gameOver = isGameOver(myRobot, dropPiece, mainPiece, SCREEN_HEIGHT);
 
         if (gameOver)
             applyGameOverScreen(screen);
-            
-        
+
+
         dropPiece.show(squares_surfaces, screen);
 
         mainPiece.show(squares_surfaces, screen);
@@ -406,11 +416,12 @@ int main(int argc, char* args[]) {
 
         myRobot.show(screen);
 
-        if (dropPiece.isColliding(SCREEN_HEIGHT) or dropPiece.isColliding(mainPiece)) {
+        if (!dropPiece.move(SQUARE_SPEED, SCREEN_HEIGHT, mainPiece)) {
             mainPiece.addPiece(dropPiece);
             dropPiece = nextDropPiece;
             nextDropPiece = createRandomPiece();
-        }
+        } else
+            dropPiece.move(-SQUARE_SPEED, SCREEN_HEIGHT, mainPiece);
 
         //Update the screen
         if (SDL_Flip(screen) == -1) {

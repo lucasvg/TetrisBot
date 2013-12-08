@@ -11,6 +11,8 @@
 #include "general_functions.h"
 #include "Shot.h"
 #include "ShotsOnTheWorld.h"
+#include "PhisicalRobot.h"
+#include <string>
 
 #ifndef ROBOT_H
 #define	ROBOT_H
@@ -44,6 +46,9 @@ private:
     
     // the surface of the gun shot
     SDL_Surface *shot_surface;
+    
+    //Interface to communicate with the robot
+    ::PhisicalRobot::Robot *phisicalRobot;
     
 public:
     //constructor
@@ -85,6 +90,18 @@ public:
     // set the score
     void setScore(int score);
     
+    void startPhisicalRobot(const char* serial_port){
+        phisicalRobot = new PhisicalRobot::Robot();
+        phisicalRobot->test(serial_port);
+    }
+    
+    ::PhisicalRobot::Robot * getRobotDevicePath(){
+        return phisicalRobot;
+    }
+    
+    void setRobotDevicePath(::PhisicalRobot::Robot robotDevicePath){
+        this->phisicalRobot = & robotDevicePath;
+    }
 };
 
 #endif	/* ROBOT_H */

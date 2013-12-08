@@ -32,6 +32,14 @@
         box.y += y;        
     }
 
+    bool Square::moveHorizontal(int x, const int SCREEN_PLAYABLE_WIDTH){
+        if(((box.x + x) < 0) or ((box.x+box.w) >SCREEN_PLAYABLE_WIDTH)){
+          return false;  
+        }
+        box.x = x;
+        return true;
+    }
+    
     bool Square::isColliding(int SCREEN_HEIGHT) {
         //the minus one is because the square colides when it is 1 pixel far
         return (box.y + box.h >= SCREEN_HEIGHT - 1);

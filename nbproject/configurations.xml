@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="89">
+<configurationDescriptor version="90">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -12,10 +12,14 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>PhisicalRobot.cpp</itemPath>
+      <itemPath>PhisicalRobot.h</itemPath>
       <itemPath>Piece.cpp</itemPath>
       <itemPath>Piece.h</itemPath>
       <itemPath>Robot.cpp</itemPath>
       <itemPath>Robot.h</itemPath>
+      <itemPath>Serial.cpp</itemPath>
+      <itemPath>Serial.h</itemPath>
       <itemPath>Shot.cpp</itemPath>
       <itemPath>Shot.h</itemPath>
       <itemPath>ShotsOnTheWorld.cpp</itemPath>
@@ -44,7 +48,6 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -60,6 +63,10 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="PhisicalRobot.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PhisicalRobot.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Piece.h" ex="false" tool="3" flavor2="0">
@@ -67,6 +74,10 @@
       <item path="Robot.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Robot.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Serial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Serial.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Shot.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -93,7 +104,6 @@
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
-        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
@@ -112,6 +122,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="PhisicalRobot.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PhisicalRobot.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Piece.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Piece.h" ex="false" tool="3" flavor2="0">
@@ -119,6 +133,10 @@
       <item path="Robot.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Robot.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Serial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Serial.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Shot.cpp" ex="false" tool="1" flavor2="0">
       </item>

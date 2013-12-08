@@ -9,6 +9,14 @@
         <group name="sbVB"/>
         <group>
             <file>file:/home/lucas/NetBeansProjects/jogo/main.cpp</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/Shot.cpp</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/Square.h</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/Timer.h</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/general_functions.h</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/general_functions.cpp</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/Timer.cpp</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/PhisicalRobot.h</file>
+            <file>file:/home/lucas/NetBeansProjects/jogo/Robot.h</file>
         </group>
     </open-files>
 </project-private>

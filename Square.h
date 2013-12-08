@@ -31,6 +31,9 @@ public:
 
     //Moves the square, return true if it moved (was not collided)
     void move(int y, const int SCREEN_HEIGHT);
+    
+    // moves the square horizontal (if it can't move total, will move the max it can)
+    bool moveHorizontal(int x, const int SCREEN_PLAYABLE_WIDTH);
 
     // if the square is colliding with the bottom of the screen
     bool isColliding(int SCREEN_HEIGHT);

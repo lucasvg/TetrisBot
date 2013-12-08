@@ -24,6 +24,9 @@ public:
 
     // moves the piece (all the squares)
     bool move(int y, const int SCREEN_HEIGHT, Piece mainPiece);
+    
+    // moves the piece in x axis
+    bool moveHorizontal(int x, const int SCREEN_PLAYABLE_WIDTH);
 
     // aggregates the otherPiece to this piece
     bool addPiece(Piece otherPiece);

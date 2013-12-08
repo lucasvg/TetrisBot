@@ -35,8 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/PhisicalRobot.o \
 	${OBJECTDIR}/Piece.o \
 	${OBJECTDIR}/Robot.o \
+	${OBJECTDIR}/Serial.o \
 	${OBJECTDIR}/Shot.o \
 	${OBJECTDIR}/ShotsOnTheWorld.o \
 	${OBJECTDIR}/Square.o \
@@ -69,6 +71,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/jogo: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/jogo ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/PhisicalRobot.o: PhisicalRobot.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/PhisicalRobot.o PhisicalRobot.cpp
+
 ${OBJECTDIR}/Piece.o: Piece.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -78,6 +85,11 @@ ${OBJECTDIR}/Robot.o: Robot.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Robot.o Robot.cpp
+
+${OBJECTDIR}/Serial.o: Serial.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Serial.o Serial.cpp
 
 ${OBJECTDIR}/Shot.o: Shot.cpp 
 	${MKDIR} -p ${OBJECTDIR}

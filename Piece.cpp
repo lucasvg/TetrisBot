@@ -14,13 +14,37 @@ void Piece::addSquare(Square AddedSquare) {
 }
 
 bool Piece::move(int y, const int SCREEN_HEIGHT, Piece mainPiece) {
-    if (isColliding(SCREEN_HEIGHT))
-        return false;
-    if (isColliding(mainPiece))
-        return false;
-
     for (int i = 0; i < mySquares.size(); i++)
         mySquares[i].move(y, SCREEN_HEIGHT);
+
+    if ((isColliding(SCREEN_HEIGHT)) or (isColliding(mainPiece))) {
+        for (int i = 0; i < mySquares.size(); i++)
+            mySquares[i].move(-y, SCREEN_HEIGHT);
+        for (int a = y; a > 0; a--) {
+            for (int i = 0; i < mySquares.size(); i++)
+                mySquares[i].move(a, SCREEN_HEIGHT);
+            if (!((isColliding(SCREEN_HEIGHT)) or (isColliding(mainPiece))))
+                return false;
+            for (int i = 0; i < mySquares.size(); i++)
+                mySquares[i].move(-a, SCREEN_HEIGHT);
+        }
+        return false;
+    }
+    return true;
+}
+
+bool Piece::moveHorizontal(int x, const int SCREEN_PLAYABLE_WIDTH) {
+    if(x <= 0)
+        return false;
+    for (int i = 0; i < mySquares.size(); i++) {
+        if (!mySquares[i].moveHorizontal(x, SCREEN_PLAYABLE_WIDTH)) {
+            for (int a = (i-1); a < 0; a--) {
+                moveHorizontal(-x, SCREEN_PLAYABLE_WIDTH);
+            }
+            return moveHorizontal(x-1, SCREEN_PLAYABLE_WIDTH);
+        }
+    }
+    return true;
 }
 
 bool Piece::addPiece(Piece otherPiece) {
@@ -65,23 +89,23 @@ Square Piece::operator[](int i) {
     return mySquares[i];
 }
 
-void Piece::clean(){
+void Piece::clean() {
     int amoutOfSquares = size();
-    for(int i = 0; i<amoutOfSquares; i++){ 
+    for (int i = 0; i < amoutOfSquares; i++) {
         mySquares.erase(mySquares.begin() + i);
     }
 }
 
-int Piece::getPieceWidth(){
-    if(size()==0)
+int Piece::getPieceWidth() {
+    if (size() == 0)
         return 0;
     int firstX, lastX;
     firstX = mySquares[0].getx();
     lastX = mySquares[0].getx() + mySquares[0].getw();
-    for(int i=1; i<size(); i++){
-        if(firstX < mySquares[i].getx())
+    for (int i = 1; i < size(); i++) {
+        if (firstX < mySquares[i].getx())
             firstX = mySquares[i].getx();
-        if(lastX < mySquares[i].getx() + mySquares[i].getw())
+        if (lastX < mySquares[i].getx() + mySquares[i].getw())
             firstX = mySquares[i].getx() + mySquares[i].getw();
     }
     return lastX - firstX;
